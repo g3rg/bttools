@@ -5,3 +5,4 @@
     Confirm the code just as we did before.
 * delete old attachment when updating / remove note
 
+* settings pages?
