@@ -14,7 +14,7 @@ export default function Notes() {
     const file = useRef<null | File>(null)
     const { id } = useParams()
     const nav = useNavigate()
-    const [note, setNote] = useState(null)
+    const [note, setNote] = useState<null | NoteType>(null)
     const [content, setContent] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
