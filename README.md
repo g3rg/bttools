@@ -1,4 +1,5 @@
 * Checkout the code
+* setup SST and AWS stuff - https://sst.dev/guide.html
 * pnpm install in root directory
 * pnpm install in packages/core
 * pnpm install in packages/functions
@@ -9,4 +10,6 @@
 * Run Dev Frontend - from frontend folder
   * pnpm run dev
  
-    
+* Deploy to Prod
+  * pnpm sst deploy --stage prod
+
