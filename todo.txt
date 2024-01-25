@@ -1,0 +1,7 @@
+* reset, change password, change email -https://sst.dev/archives/manage-user-accounts-in-aws-amplify.html
+* handle failed to confirm email -
+    Check for the UsernameExistsException in the handleSubmit function’s catch block.
+    Use the Auth.resendSignUp() method to resend the code if the user has not been previously confirmed. Here is a link to the Amplify API docs.
+    Confirm the code just as we did before.
+* delete old attachment when updating / remove note
+
