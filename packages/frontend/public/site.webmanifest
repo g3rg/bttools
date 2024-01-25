@@ -1,6 +1,6 @@
 {
-  "short_name": "BT Tools",
-  "name": "Battletech Tools",
+  "short_name": "Battletech Tools",
+  "name": "Dodgy tools for organising and playing Battletech",
   "icons": [
     {
       "src": "android-chrome-192x192.png",
