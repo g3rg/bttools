@@ -4,9 +4,9 @@
 * pnpm install in packages/functions
 * pnpm install in packages/frontend
 
-* Run Dev backend
+* Run Dev backend - from root
   * pnpm sst dev
-* Run Dev Frontend
+* Run Dev Frontend - from frontend folder
   * pnpm run dev
  
     
