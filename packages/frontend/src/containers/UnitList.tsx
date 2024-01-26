@@ -11,7 +11,7 @@ const dummyData = mechdata;
 
 const MUL_UnitDetail_URL = `https://masterunitlist.info/Unit/Details/{id}`
 const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s={mechName}`
-const Sarna_URL = `https://www.sarna.net/wiki/{mechChasis}`
+// const Sarna_URL = `https://www.sarna.net/wiki/{mechChasis}`
 
 const roles = [
     '',
