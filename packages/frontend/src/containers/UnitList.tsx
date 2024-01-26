@@ -65,14 +65,16 @@ export default function UnitList() {
 
         if (minTonFilter !== "") {
             let minTons = parseInt(minTonFilter) // Todo Handle non-integers / force the field to be an int
-            if (parseInt(unit.bv || "100") < minTons) {
+            let unitTons = parseInt(unit.tons?.trim() || "50")
+            if (unitTons < minTons) {
                 show = false
             }
         }
 
         if (maxTonFilter !== "") {
             let maxTons = parseInt(maxTonFilter) // Todo as above
-            if (parseInt(unit.bv || "0") > maxTons) {
+            let unitTons = parseInt(unit.tons?.trim() || "50")
+            if (unitTons > maxTons) {
                 show = false
             }
         }
