@@ -5,8 +5,31 @@ import { useAppContext } from '../lib/contextLib'
 import { UnitType } from '../types/unit.ts'
 import { mechdata } from '../mechdata.ts'
 import './UnitList.css'
+import { Form } from 'react-bootstrap'
 
 const dummyData = mechdata;
+
+const roles = [
+    '',
+    'Ambusher',
+    'Brawler',
+    'Jugernaut',
+    'Missile Boat',
+    'None',
+    'Skirmisher',
+    'Sniper',
+    'Striker',
+    'Scout',
+]
+
+const rules = [
+    '',
+    'Introductory',
+    'Standard',
+    'Advanced',
+    'Experimental',
+    'Unknown'
+]
 
 export default function UnitList() {
     const { isAuthenticated } = useAppContext()
@@ -14,6 +37,12 @@ export default function UnitList() {
     const [unitFilter, setUnitFilter] = useState("")
     const [minTonFilter, setMinTonFilter] = useState("")
     const [maxTonFilter, setMaxTonFilter] = useState("")
+    const [minBVFilter, setMinBVFilter] = useState("")
+    const [maxBVFilter, setMaxBVFilter] = useState("")
+    const [minPVFilter, setMinPVFilter] = useState("")
+    const [maxPVFilter, setMaxPVFilter] = useState("")
+    const [roleFilter, setRoleFilter] = useState("")
+    const [ruleFilter, setRuleFilter] = useState("")
 
     useEffect(() => {
         async function onLoad() {
@@ -36,14 +65,58 @@ export default function UnitList() {
 
         if (minTonFilter !== "") {
             let minTons = parseInt(minTonFilter) // Todo Handle non-integers / force the field to be an int
-            if (parseInt(unit.tons || "100") < minTons) {
+            if (parseInt(unit.bv || "100") < minTons) {
                 show = false
             }
         }
 
         if (maxTonFilter !== "") {
             let maxTons = parseInt(maxTonFilter) // Todo as above
-            if (parseInt(unit.tons || "0") > maxTons) {
+            if (parseInt(unit.bv || "0") > maxTons) {
+                show = false
+            }
+        }
+
+        if (minBVFilter !== "") {
+            let minBV = parseInt(minBVFilter) // Todo Handle non-integers / force the field to be an int
+            let unitBV = parseInt(unit.bv?.replace(',','') || "0")
+            if (unitBV < minBV) {
+                show = false
+            }
+        }
+
+        if (maxBVFilter !== "") {
+            let maxBV = parseInt(maxBVFilter) // Todo as above
+            if (parseInt(unit.bv?.replace(',','') || "0") > maxBV) {
+                show = false
+            }
+        }
+
+        if (minPVFilter !== "") {
+            let minPV = parseInt(minPVFilter) // Todo Handle non-integers / force the field to be an int
+            let unitPV = parseInt(unit.pv?.replace(',','') || "0")
+            if (unitPV < minPV) {
+                show = false
+            }
+        }
+
+        if (maxPVFilter !== "") {
+            let maxPV = parseInt(maxPVFilter) // Todo as above
+            if (parseInt(unit.pv?.replace(',','') || "0") > maxPV) {
+                show = false
+            }
+        }
+
+        if (roleFilter !== "") {
+            let unitRole = unit.role
+            if (unitRole !== roleFilter) {
+                show = false
+            }
+        }
+
+        if (ruleFilter !== "") {
+            let unitRule = unit.rules
+            if (unitRule !== ruleFilter) {
                 show = false
             }
         }
@@ -84,16 +157,67 @@ export default function UnitList() {
                         }
                     />
                     </th>
-                    <th>BV</th>
-                    <th>PV</th>
-                    <th>Role</th>
-                    <th>Rules</th>
+                    <th>
+                        BV<br/>
+                        <input
+                            type="text"
+                            value={minBVFilter}
+                            onChange={(e) =>
+                                setMinBVFilter(e.target.value)
+                            }
+                        />
+                        to
+                        <input
+                            type="text"
+                            value={maxBVFilter}
+                            onChange={(e) =>
+                                setMaxBVFilter(e.target.value)
+                            }
+                        />
+                    </th>
+                    <th>PV
+                        <br/>
+                        <input
+                            type="text"
+                            value={minPVFilter}
+                            onChange={(e) =>
+                                setMinPVFilter(e.target.value)
+                            }
+                        />
+                        to
+                        <input
+                            type="text"
+                            value={maxPVFilter}
+                            onChange={(e) =>
+                                setMaxPVFilter(e.target.value)
+                            }
+                        /></th>
+                    <th>
+                        Role<br/>
+                        <Form.Select onChange={ (e) =>
+                            setRoleFilter(e.target.value)
+                        }>
+                            { roles.map( (role) => (
+                                <option>{role || ''}</option>
+                            ))}
+                        </Form.Select>
+                    </th>
+                    <th>
+                        Rules<br/>
+                        <Form.Select onChange={(e) =>
+                            setRuleFilter(e.target.value)
+                        }>
+                            {rules.map((rule) => (
+                                <option>{rule || ''}</option>
+                            ))}
+                        </Form.Select>
+                    </th>
                     <th>Intro</th>
                     <th>Links</th>
                 </tr>
                 </thead>
                 <tbody>
-                { units.map( (unit) => {
+                {units.map((unit) => {
                     if (doFilter(unit)) {
                         return (
                             <tr>
