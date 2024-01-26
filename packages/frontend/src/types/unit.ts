@@ -1,5 +1,5 @@
 export interface UnitType {
-    mulId?: string;
+    id?: string;
     name: string;
     tons?: string;
     bv?: string;

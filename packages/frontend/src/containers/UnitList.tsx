@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
-import {Accordion, Table} from 'react-bootstrap'
+import {Accordion, Dropdown, Table} from 'react-bootstrap'
 import { useAppContext } from '../lib/contextLib'
 import { UnitType } from '../types/unit.ts'
 import { mechdata } from '../mechdata.ts'
@@ -8,6 +8,10 @@ import './UnitList.css'
 import { Form } from 'react-bootstrap'
 
 const dummyData = mechdata;
+
+const MUL_UnitDetail_URL = `https://masterunitlist.info/Unit/Details/{id}`
+const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s={mechName}`
+const Sarna_URL = `https://www.sarna.net/wiki/{mechChasis}`
 
 const roles = [
     '',
@@ -126,6 +130,26 @@ export default function UnitList() {
         return show
     }
 
+    function renderLinks(unit: UnitType) {
+        let mechName = unit.name || ''
+        let mulId = unit.id || ''
+        /*return (
+            <><a target="_blank" href={MUL_UnitDetail_URL.replace('{id}', mulId)}>...</a></>
+        )*/
+        /*return (
+            <><a target="_blank" href={Flechs_UnitDetail_URL.replace('{mechName}', mechName)}>...</a></>
+        )*/
+        return (
+            <Dropdown>
+                <Dropdown.Toggle></Dropdown.Toggle>
+                <Dropdown.Menu>
+                    <Dropdown.Item target="_blank" href={MUL_UnitDetail_URL.replace('{id}', mulId)}>Master Unit List</Dropdown.Item>
+                    <Dropdown.Item target="_blank" href={Flechs_UnitDetail_URL.replace('{mechName}', mechName)}>Flechs Sheets</Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
+        )
+    }
+
     function renderUnitList(units: UnitType[]) {
         return (
             <Table striped bordered hover size="sm" responsive="sm">
@@ -230,7 +254,7 @@ export default function UnitList() {
                                 <td>{unit.role}</td>
                                 <td>{unit.rules}</td>
                                 <td>{unit.intro}</td>
-                                <td>...</td>
+                                <td>{ renderLinks(unit) }</td>
                             </tr>)
                     } else {
                         return (<></>)
