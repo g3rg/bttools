@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
-import {Accordion, Dropdown, Table} from 'react-bootstrap'
+import {Offcanvas, Dropdown, Table} from 'react-bootstrap'
 import { useAppContext } from '../lib/contextLib'
 import { UnitType } from '../types/unit.ts'
 import './UnitList.css'
 import { Form } from 'react-bootstrap'
 
 import mechData from '../data/merged_mech_data.json'
+import Button from "react-bootstrap/Button";
 
 const MUL_UnitDetail_URL = `https://masterunitlist.info/Unit/Details/{id}`
 const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s={mechName}`
-// const Sarna_URL = `https://www.sarna.net/wiki/{mechChasis}`
+const Sarna_URL = `https://www.sarna.net/wiki/{mechChassis}`
 
 const roles = [
     '',
@@ -37,6 +38,11 @@ const rules = [
 export default function UnitList() {
     const { isAuthenticated } = useAppContext()
     const [isLoading, setIsLoading] = useState(true)
+    const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
+
+    const handleShowAdvancedFilters = () => setShowAdvancedFilters(true)
+    const handleHideAdvancedFilters = () => setShowAdvancedFilters(false)
+
     const [unitFilter, setUnitFilter] = useState("")
     const [minTonFilter, setMinTonFilter] = useState("")
     const [maxTonFilter, setMaxTonFilter] = useState("")
@@ -46,6 +52,15 @@ export default function UnitList() {
     const [maxPVFilter, setMaxPVFilter] = useState("")
     const [roleFilter, setRoleFilter] = useState("")
     const [ruleFilter, setRuleFilter] = useState("")
+
+    // advanced filters
+    const [engineFilter, setEngineFilter] = useState("")
+    const [structureFilter, setStructureFilter] = useState("")
+    const [heatFilter, setHeatFilter] = useState("")
+    const [walkFilter, setWalkFilter] = useState("")
+    const [jumpFilter, setJumpFilter] = useState("")
+    const [armorTypeFilter, setArmorTypeFilter] = useState("")
+    const [armorPointsFilter, setArmorPointsFilter] = useState("")
 
     useEffect(() => {
         async function onLoad() {
@@ -66,64 +81,86 @@ export default function UnitList() {
 
         if (unitFilter !== "" && !(unit.mechName.toLowerCase().indexOf(unitFilter.toLowerCase()) >= 0)) {
             show = false
-        }
-
-        if (minTonFilter !== "") {
+        } else if (minTonFilter !== "") {
             let minTons = parseInt(minTonFilter) // Todo Handle non-integers / force the field to be an int
             let unitTons = parseInt(unit.tons?.trim() || "50")
             if (unitTons < minTons) {
                 show = false
             }
-        }
-
-        if (maxTonFilter !== "") {
+        } else if (maxTonFilter !== "") {
             let maxTons = parseInt(maxTonFilter) // Todo as above
             let unitTons = parseInt(unit.tons?.trim() || "50")
             if (unitTons > maxTons) {
                 show = false
             }
-        }
-
-        if (minBVFilter !== "") {
+        } else if (minBVFilter !== "") {
             let minBV = parseInt(minBVFilter) // Todo Handle non-integers / force the field to be an int
             let unitBV = parseInt(unit.bv?.replace(',','') || "0")
             if (unitBV < minBV) {
                 show = false
             }
-        }
-
-        if (maxBVFilter !== "") {
+        } else if(maxBVFilter !== "") {
             let maxBV = parseInt(maxBVFilter) // Todo as above
             if (parseInt(unit.bv?.replace(',','') || "0") > maxBV) {
                 show = false
             }
-        }
-
-        if (minPVFilter !== "") {
+        } else if (minPVFilter !== "") {
             let minPV = parseInt(minPVFilter) // Todo Handle non-integers / force the field to be an int
             let unitPV = parseInt(unit.pv?.replace(',','') || "0")
             if (unitPV < minPV) {
                 show = false
             }
-        }
-
-        if (maxPVFilter !== "") {
+        } else if (maxPVFilter !== "") {
             let maxPV = parseInt(maxPVFilter) // Todo as above
             if (parseInt(unit.pv?.replace(',','') || "0") > maxPV) {
                 show = false
             }
-        }
-
-        if (roleFilter !== "") {
+        } else if (roleFilter !== "") {
             let unitRole = unit.role
             if (unitRole !== roleFilter) {
                 show = false
             }
-        }
-
-        if (ruleFilter !== "") {
+        } else if (ruleFilter !== "") {
             let unitRule = unit.rules
             if (unitRule !== ruleFilter) {
+                show = false
+            }
+        } else if (engineFilter !== "") {
+            let unitEngine = unit.engine || ''
+            if (!(unitEngine.toLowerCase().indexOf(engineFilter.toLowerCase()) >=0)) {
+                show = false
+            }
+        } else if (structureFilter !== "") {
+            let unitStructure = unit.structure || ''
+            if (!(unitStructure.toLowerCase().indexOf(structureFilter.toLowerCase()) >=0)) {
+                show = false
+            }
+        } else if (heatFilter !== "") {
+            let unitHeat = unit.heatSinks || ''
+            if (!(unitHeat.toLowerCase().indexOf(heatFilter.toLowerCase()) >=0)) {
+                show = false
+            }
+        } else if (walkFilter !== "") {
+            let minWalk = parseInt(walkFilter)
+            let unitWalk = parseInt(unit.walkMP || '0')
+            if (minWalk > unitWalk) {
+                show = false
+            }
+        } else if (jumpFilter !== "") {
+            let minJump = parseInt(jumpFilter)
+            let unitJump = parseInt(unit.jumpMP || '0')
+            if (minJump > unitJump) {
+                show = false
+            }
+        } else if (armorTypeFilter !== "") {
+            let unitArmorType = unit.armorType || ''
+            if (!(unitArmorType.toLowerCase().indexOf(armorTypeFilter.toLowerCase()) >=0)) {
+                show = false
+            }
+        } else if (armorPointsFilter !== "") {
+            let minArmor = parseInt(armorPointsFilter)
+            let unitArmor = unit.armorPoints || 0
+            if (minArmor > unitArmor) {
                 show = false
             }
         }
@@ -134,18 +171,14 @@ export default function UnitList() {
     function renderLinks(unit: UnitType) {
         let mechName = unit.mechName || ''
         let mulId = unit.id || ''
-        /*return (
-            <><a target="_blank" href={MUL_UnitDetail_URL.replace('{id}', mulId)}>...</a></>
-        )*/
-        /*return (
-            <><a target="_blank" href={Flechs_UnitDetail_URL.replace('{mechName}', mechName)}>...</a></>
-        )*/
+        let mechChassis = unit.chassis || ''
         return (
             <Dropdown>
                 <Dropdown.Toggle></Dropdown.Toggle>
                 <Dropdown.Menu>
                     <Dropdown.Item target="_blank" href={MUL_UnitDetail_URL.replace('{id}', mulId)}>Master Unit List</Dropdown.Item>
                     <Dropdown.Item target="_blank" href={Flechs_UnitDetail_URL.replace('{mechName}', mechName)}>Flechs Sheets</Dropdown.Item>
+                    <Dropdown.Item target="_blank" href={Sarna_URL.replace('{mechChassis}', mechChassis)}>Sarna</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
         )
@@ -277,24 +310,78 @@ export default function UnitList() {
     }
 
     function renderFilters() {
-        return (
-            <Accordion flush>
-                <Accordion.Item eventKey="0">
-                    <Accordion.Header>Filters</Accordion.Header>
-                    <Accordion.Body>
-                        Faction
-                        Era
-                        My Units
-                    </Accordion.Body>
-                </Accordion.Item>
-            </Accordion>
-        )
+        return (<>
+            <Button onClick={handleShowAdvancedFilters}>Advanced Search</Button>
+
+            <Offcanvas show={showAdvancedFilters} onHide={handleHideAdvancedFilters}>
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Advanced</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    Faction<br/>
+                    Era<br/>
+                    Engine: <input
+                        type="text"
+                        value={engineFilter}
+                        onChange={(e) =>
+                            setEngineFilter(e.target.value)
+                        }
+                    /><br/>
+                        Structure: <input
+                        type="text"
+                        value={structureFilter}
+                        onChange={(e) =>
+                            setStructureFilter(e.target.value)
+                        }
+                    /><br/>
+                        Heatsinks: <input
+                        type="text"
+                        value={heatFilter}
+                        onChange={(e) =>
+                            setHeatFilter(e.target.value)
+                        }
+                    /><br/>
+                        Min Walk MP: <input
+                        type="text"
+                        value={walkFilter}
+                        onChange={(e) =>
+                            setWalkFilter(e.target.value)
+                        }
+                    />
+                        <br/>
+                        Min Jump MP:<input
+                        type="text"
+                        value={jumpFilter}
+                        onChange={(e) =>
+                            setJumpFilter(e.target.value)
+                        }
+                    />
+                        <br/>
+                        Armor Type:<input
+                        type="text"
+                        value={armorTypeFilter}
+                        onChange={(e) =>
+                            setArmorTypeFilter(e.target.value)
+                        }
+                    />
+                    <br/>
+                    Min Armor Points:<input
+                        type="text"
+                        value={armorPointsFilter}
+                        onChange={(e) =>
+                            setArmorPointsFilter(e.target.value)
+                        }
+                    /><br/>
+                    Weapons...<br/>
+                </Offcanvas.Body>
+            </Offcanvas>
+        </>)
     }
 
     return (
         <div className="Home">
-            { renderFilters() }
-            {renderUnits() }
+            {renderFilters()}
+            {renderUnits()}
         </div>
     )
 }
