@@ -385,20 +385,28 @@ export default function UnitList() {
                     <Offcanvas.Title>Advanced</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                    Faction: <input
-                        type="text"
-                        value={factionFilter}
-                        onChange={(e) =>
-                            setFactionFilter(e.target.value)
-                        }
-                    /><br/>
-                    Era: <input
-                        type="text"
-                        value={eraFilter}
-                        onChange={(e) =>
-                            setEraFilter(e.target.value)
-                        }
-                    /><br/>
+                    Faction:
+                    <Form.Select value={factionFilter} onChange={(e) =>
+                        setFactionFilter(e.target.value)
+                    }>
+                            <option></option>
+                        {
+                            Object.keys(eraFactionData.factions).map( (faction) => (
+                                <option>{faction || ''}</option>
+                            ))}
+                    </Form.Select>
+                    <br/>
+                    Era:
+                    <Form.Select value={eraFilter} onChange={(e) =>
+                        setEraFilter(e.target.value)
+                    }>
+                            <option></option>
+                        {
+                            Object.keys(eraFactionData.eras).map( (era) => (
+                                <option>{era || ''}</option>
+                            ))}
+                    </Form.Select>
+                    <br/>
                     TechBase:
                     <Form.Select value={techBaseFilter} onChange={(e) =>
                         setTechBaseFilter(e.target.value)
