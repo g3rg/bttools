@@ -81,83 +81,102 @@ export default function UnitList() {
 
         if (unitFilter !== "" && !(unit.mechName.toLowerCase().indexOf(unitFilter.toLowerCase()) >= 0)) {
             show = false
-        } else if (minTonFilter !== "") {
+        }
+
+        if (show && minTonFilter !== "") {
             let minTons = parseInt(minTonFilter) // Todo Handle non-integers / force the field to be an int
             let unitTons = parseInt(unit.tons?.trim() || "50")
             if (unitTons < minTons) {
                 show = false
             }
-        } else if (maxTonFilter !== "") {
+        }
+        if (show && maxTonFilter !== "") {
             let maxTons = parseInt(maxTonFilter) // Todo as above
             let unitTons = parseInt(unit.tons?.trim() || "50")
             if (unitTons > maxTons) {
                 show = false
             }
-        } else if (minBVFilter !== "") {
+        }
+        if (show && minBVFilter !== "") {
             let minBV = parseInt(minBVFilter) // Todo Handle non-integers / force the field to be an int
             let unitBV = parseInt(unit.bv?.replace(',','') || "0")
             if (unitBV < minBV) {
                 show = false
             }
-        } else if(maxBVFilter !== "") {
+        }
+        if(show && maxBVFilter !== "") {
             let maxBV = parseInt(maxBVFilter) // Todo as above
             if (parseInt(unit.bv?.replace(',','') || "0") > maxBV) {
                 show = false
             }
-        } else if (minPVFilter !== "") {
+        }
+        if (show && minPVFilter !== "") {
             let minPV = parseInt(minPVFilter) // Todo Handle non-integers / force the field to be an int
             let unitPV = parseInt(unit.pv?.replace(',','') || "0")
             if (unitPV < minPV) {
                 show = false
             }
-        } else if (maxPVFilter !== "") {
+        }
+        if (show && maxPVFilter !== "") {
             let maxPV = parseInt(maxPVFilter) // Todo as above
             if (parseInt(unit.pv?.replace(',','') || "0") > maxPV) {
                 show = false
             }
-        } else if (roleFilter !== "") {
+        }
+        if (show && roleFilter !== "") {
             let unitRole = unit.role
             if (unitRole !== roleFilter) {
                 show = false
             }
-        } else if (ruleFilter !== "") {
+        }
+        if (show && ruleFilter !== "") {
             let unitRule = unit.rules
             if (unitRule !== ruleFilter) {
                 show = false
             }
-        } else if (engineFilter !== "") {
+        }
+        if (show && engineFilter !== "") {
             let unitEngine = unit.engine || ''
             if (!(unitEngine.toLowerCase().indexOf(engineFilter.toLowerCase()) >=0)) {
                 show = false
             }
-        } else if (structureFilter !== "") {
+        }
+        if (show && structureFilter !== "") {
             let unitStructure = unit.structure || ''
             if (!(unitStructure.toLowerCase().indexOf(structureFilter.toLowerCase()) >=0)) {
                 show = false
             }
-        } else if (heatFilter !== "") {
+        }
+        if (show && heatFilter !== "") {
             let unitHeat = unit.heatSinks || ''
             if (!(unitHeat.toLowerCase().indexOf(heatFilter.toLowerCase()) >=0)) {
                 show = false
             }
-        } else if (walkFilter !== "") {
+        }
+        if (show && walkFilter !== "") {
             let minWalk = parseInt(walkFilter)
             let unitWalk = parseInt(unit.walkMP || '0')
+            if (unit.variant == 'STK-3F') {
+                console.log(`${minWalk} - ${unitWalk}`)
+            }
             if (minWalk > unitWalk) {
                 show = false
             }
-        } else if (jumpFilter !== "") {
+        }
+        if (show && jumpFilter !== "") {
             let minJump = parseInt(jumpFilter)
             let unitJump = parseInt(unit.jumpMP || '0')
             if (minJump > unitJump) {
                 show = false
             }
-        } else if (armorTypeFilter !== "") {
+        }
+        if (show && armorTypeFilter !== "") {
             let unitArmorType = unit.armorType || ''
             if (!(unitArmorType.toLowerCase().indexOf(armorTypeFilter.toLowerCase()) >=0)) {
                 show = false
             }
-        } else if (armorPointsFilter !== "") {
+        }
+        if (show && armorPointsFilter !== "") {
             let minArmor = parseInt(armorPointsFilter)
             let unitArmor = unit.armorPoints || 0
             if (minArmor > unitArmor) {
