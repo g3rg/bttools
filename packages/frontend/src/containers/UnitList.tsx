@@ -49,6 +49,8 @@ export default function UnitList() {
     const [isLoading, setIsLoading] = useState(true)
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
 
+    const [rowCount, setRowCount] = useState(0)
+
     const handleShowAdvancedFilters = () => setShowAdvancedFilters(true)
     const handleHideAdvancedFilters = () => setShowAdvancedFilters(false)
 
@@ -89,6 +91,12 @@ export default function UnitList() {
 
         onLoad()
     }, [isAuthenticated])
+
+    useEffect( () => {
+        setRowCount(document.getElementById("unitTable")?.tBodies[0].rows.length);
+    }, [unitFilter, minTonFilter, maxTonFilter, minBVFilter, maxBVFilter, minPVFilter, maxPVFilter,
+        roleFilter, ruleFilter, factionFilter, eraFilter, techBaseFilter, engineFilter, structureFilter, heatFilter,
+        walkFilter, jumpFilter, armorTypeFilter, armorPointsFilter, weaponFilter])
 
     function doFilter(unit: UnitType) {
         let show = true
@@ -172,8 +180,6 @@ export default function UnitList() {
             }
         }
 
-
-
         if (show && techBaseFilter !== "") {
             let techBase = unit.techbase || ''
             if (!(techBase.toLowerCase().indexOf(techBaseFilter.toLowerCase()) >=0)) {
@@ -253,7 +259,7 @@ export default function UnitList() {
 
     function renderUnitList(units: { [mechName:string] : UnitType }) {
         return (
-            <Table striped bordered hover size="sm" responsive="sm">
+            <Table id="unitTable" striped bordered hover size="sm" responsive="sm">
                 <thead>
                 <tr>
                     <th>
@@ -376,9 +382,58 @@ export default function UnitList() {
         )
     }
 
+    function summariseFilters() {
+        /*
+        unitFilter        minTonFilter        maxTonFilter        minBVFilter        maxBVFilter        minPVFilter
+        maxPVFilter        roleFilter        ruleFilter        factionFilter        eraFilter        techBaseFilter
+        engineFilter        structureFilter        heatFilter        walkFilter        jumpFilter        armorTypeFilter
+        armorPointsFilter        weaponFilter
+
+         */
+        let filterSummary = ''
+        if (factionFilter) {
+            filterSummary += ` Faction (${factionFilter})`
+        }
+        if (eraFilter) {
+            filterSummary += ` Era (${eraFilter})`
+        }
+        if (techBaseFilter) {
+            filterSummary += ` Tech (${techBaseFilter})`
+        }
+        if (engineFilter) {
+            filterSummary += ` Engine (${engineFilter})`
+        }
+        if (structureFilter) {
+            filterSummary += ` Structure (${structureFilter})`
+        }
+        if (heatFilter) {
+            filterSummary += ` HeatSinks (${heatFilter})`
+        }
+        if (walkFilter) {
+            filterSummary += ` Min Walk (${walkFilter})`
+        }
+        if (jumpFilter) {
+            filterSummary += ` Min Jump (${jumpFilter})`
+        }
+        if (armorTypeFilter) {
+            filterSummary += ` Armor Type(${armorTypeFilter})`
+        }
+        if (armorPointsFilter) {
+            filterSummary += ` Armor Points(${armorPointsFilter})`
+        }
+        if (weaponFilter) {
+            filterSummary += ` Weapons (${weaponFilter})`
+        }
+
+        return `${filterSummary.trim()}`
+    }
+
     function renderFilters() {
         return (<>
             <Button onClick={handleShowAdvancedFilters}>Advanced Search</Button>
+            &nbsp;&nbsp;Rows { rowCount }<br/>
+            <br/>
+            &nbsp;Active Filters: {summariseFilters()}
 
             <Offcanvas show={showAdvancedFilters} onHide={handleHideAdvancedFilters}>
                 <Offcanvas.Header closeButton>
