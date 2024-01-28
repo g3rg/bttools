@@ -431,9 +431,34 @@ export default function UnitList() {
         return `${filterSummary.trim()}`
     }
 
+
+    function clearAdvancedFilters() {
+        setUnitFilter("")
+        setMinTonFilter("")
+        setMaxTonFilter("")
+        setMinBVFilter("")
+        setMaxBVFilter("")
+        setMinPVFilter("")
+        setMaxPVFilter("")
+        setRoleFilter("")
+        setRuleFilter("")
+        setFactionFilter("")
+        setEraFilter("")
+        setTechBaseFilter("")
+        setEngineFilter("")
+        setStructureFilter("")
+        setHeatFilter("")
+        setWalkFilter("")
+        setJumpFilter("")
+        setArmorTypeFilter("")
+        setArmorPointsFilter("")
+        setWeaponFilter("")
+        return undefined;
+    }
+
     function renderFilters() {
         return (<>
-            <Button onClick={handleShowAdvancedFilters}>Advanced Search</Button>
+            <Button onClick={handleShowAdvancedFilters} size="sm">Advanced Search</Button>
             &nbsp;&nbsp;Rows { rowCount }<br/>
             <br/>
             &nbsp;Active Filters: {summariseFilters()}
@@ -443,6 +468,7 @@ export default function UnitList() {
                     <Offcanvas.Title>Advanced</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
+                    <Button onClick={clearAdvancedFilters} size='sm'>Clear Filters</Button><br/>
                     Faction:
                     <Form.Select value={factionFilter} onChange={(e) =>
                         setFactionFilter(e.target.value)
