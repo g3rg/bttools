@@ -269,39 +269,15 @@ export default function UnitList() {
                 <thead>
                 <tr>
                     <th>
-                        Unit<br/>
-                        <input
-                            type="text"
-                            value={unitFilter}
-                            onChange={(e) =>
-                                setUnitFilter(e.target.value)
-                            }
-                        />
+                        Unit
+                        <Form.Control type="text" value={unitFilter} onChange={(e) =>
+                            setUnitFilter(e.target.value)}/>
                     </th>
                     <th>Tons</th>
                     <th>BV</th>
                     <th>PV</th>
-                    <th>
-                        Role<br/>
-                        <Form.Select onChange={ (e) =>
-                            setRoleFilter(e.target.value)
-                        }>
-                            {
-                                roles.map( (role) => (
-                                <option>{role || ''}</option>
-                            ))}
-                        </Form.Select>
-                    </th>
-                    <th>
-                        Rules<br/>
-                        <Form.Select onChange={(e) =>
-                            setRuleFilter(e.target.value)
-                        }>
-                            {rules.map((rule) => (
-                                <option>{rule || ''}</option>
-                            ))}
-                        </Form.Select>
-                    </th>
+                    <th>Role</th>
+                    <th>Rules</th>
                     <th>Intro</th>
                     <th>Links</th>
                 </tr>
@@ -339,55 +315,54 @@ export default function UnitList() {
     }
 
     function summariseFilters() {
-        /*
-        unitFilter        minTonFilter        maxTonFilter        minBVFilter        maxBVFilter        minPVFilter
-        maxPVFilter        roleFilter        ruleFilter        factionFilter        eraFilter        techBaseFilter
-        engineFilter        structureFilter        heatFilter        walkFilter        jumpFilter        armorTypeFilter
-        armorPointsFilter        weaponFilter
-
-         */
         let filterSummary = ''
         if (factionFilter) {
-            filterSummary += ` Faction (${factionFilter})`
+            filterSummary += ` Faction (${factionFilter}), `
         }
         if (eraFilter) {
-            filterSummary += ` Era (${eraFilter})`
+            filterSummary += ` Era (${eraFilter}), `
         }
         if (techBaseFilter) {
-            filterSummary += ` Tech (${techBaseFilter})`
+            filterSummary += ` Tech (${techBaseFilter}), `
+        }
+        if (roleFilter) {
+            filterSummary += ` Role (${roleFilter}), `
+        }
+        if (ruleFilter) {
+            filterSummary += ` Rule (${ruleFilter}), `
         }
         if (minTonFilter > 0 || maxTonFilter < 100) {
-            filterSummary += ` Tons ${minTonFilter} to ${maxTonFilter}`
+            filterSummary += ` Tons ${minTonFilter} to ${maxTonFilter}, `
         }
         if (minBVFilter > 0 || maxBVFilter < MAX_BV) {
-            filterSummary += ` BV ${minBVFilter} to ${maxBVFilter}`
+            filterSummary += ` BV ${minBVFilter} to ${maxBVFilter}, `
         }
         if (minPVFilter > 0 || maxPVFilter < MAX_PV) {
-            filterSummary += ` PV ${minPVFilter} to ${maxPVFilter}`
+            filterSummary += ` PV ${minPVFilter} to ${maxPVFilter}, `
         }
         if (engineFilter) {
-            filterSummary += ` Engine (${engineFilter})`
+            filterSummary += ` Engine (${engineFilter}), `
         }
         if (structureFilter) {
-            filterSummary += ` Structure (${structureFilter})`
+            filterSummary += ` Structure (${structureFilter}), `
         }
         if (heatFilter) {
-            filterSummary += ` HeatSinks (${heatFilter})`
+            filterSummary += ` HeatSinks (${heatFilter}), `
         }
         if (walkFilter) {
-            filterSummary += ` Min Walk (${walkFilter})`
+            filterSummary += ` Min Walk (${walkFilter}), `
         }
         if (jumpFilter) {
-            filterSummary += ` Min Jump (${jumpFilter})`
+            filterSummary += ` Min Jump (${jumpFilter}), `
         }
         if (armorTypeFilter) {
-            filterSummary += ` Armor Type(${armorTypeFilter})`
+            filterSummary += ` Armor Type(${armorTypeFilter}), `
         }
         if (armorPointsFilter) {
-            filterSummary += ` Armor Points(${armorPointsFilter})`
+            filterSummary += ` Armor Points(${armorPointsFilter}), `
         }
         if (weaponFilter) {
-            filterSummary += ` Weapons (${weaponFilter})`
+            filterSummary += ` Weapons (${weaponFilter}), `
         }
 
         return `${filterSummary.trim()}`
@@ -435,80 +410,93 @@ export default function UnitList() {
                     <Form.Select value={factionFilter} onChange={(e) =>
                         setFactionFilter(e.target.value)
                     }>
-                            <option></option>
+                        <option></option>
                         {
-                            Object.keys(eraFactionData.factions).sort().map( (faction) => (
+                            Object.keys(eraFactionData.factions).sort().map((faction) => (
                                 <option>{faction || ''}</option>
                             ))}
                     </Form.Select>
-                    <br/>
                     Era:
                     <Form.Select value={eraFilter} onChange={(e) =>
                         setEraFilter(e.target.value)
                     }>
-                            <option></option>
+                        <option></option>
                         {
-                            Object.keys(eraFactionData.eras).sort().map( (era) => (
+                            Object.keys(eraFactionData.eras).sort().map((era) => (
                                 <option>{era || ''}</option>
                             ))}
                     </Form.Select>
-                    <br/>
                     TechBase:
                     <Form.Select value={techBaseFilter} onChange={(e) =>
                         setTechBaseFilter(e.target.value)
                     }>
                         {
-                            techBases.map( (techBase) => (
+                            techBases.map((techBase) => (
                                 <option>{techBase || ''}</option>
                             ))}
                     </Form.Select>
-                    <br/>
-                    Tons<br/>
+                    Role:
+                    <Form.Select value={roleFilter} onChange={(e) =>
+                            setRoleFilter(e.target.value)
+                        }>
+                            {
+                                roles.map((role) => (
+                                    <option>{role || ''}</option>
+                                ))}
+                    </Form.Select>
+                    Rules:
+                    <Form.Select value={ruleFilter} onChange={(e) =>
+                            setRuleFilter(e.target.value)
+                        }>
+                            {rules.map((rule) => (
+                                <option>{rule || ''}</option>
+                            ))}
+                    </Form.Select>
+
+                    Tons:
                     Min: {minTonFilter}
                     <Form.Range step="5" value={minTonFilter} onChange={(e) =>
                         setMinTonFilter(parseInt(e.target.value))}></Form.Range>
                     Max: {maxTonFilter}
                     <Form.Range step="5" value={maxTonFilter} onChange={(e) =>
                         setMaxTonFilter(parseInt(e.target.value))}></Form.Range>
-                    BV<br/>
-                    Min: {minBVFilter}
+                    BV Min: {minBVFilter}
                     <Form.Range step="100" value={minBVFilter} max={MAX_BV} onChange={(e) =>
                         setMinBVFilter(parseInt(e.target.value))}></Form.Range>
-                    Max: {maxBVFilter}
+                    BV Max: {maxBVFilter}
                     <Form.Range step="100" value={maxBVFilter} max={MAX_BV} onChange={(e) =>
                         setMaxBVFilter(parseInt(e.target.value))}></Form.Range>
-                    PV<br/>
-                    Min: {minPVFilter}
+                    PV Min: {minPVFilter}
                     <Form.Range step="5" value={minPVFilter} max={MAX_PV} onChange={(e) =>
                         setMinPVFilter(parseInt(e.target.value))}></Form.Range>
-                    Max: {maxPVFilter}
+                    PV Max: {maxPVFilter}
                     <Form.Range step="5" value={maxPVFilter} max={MAX_PV} onChange={(e) =>
                         setMaxPVFilter(parseInt(e.target.value))}></Form.Range>
 
                     Engine:
                     <Form.Control type="text" value={engineFilter} onChange={(e) =>
-                        setEngineFilter(e.target.value)} />
+                        setEngineFilter(e.target.value)}/>
                     Structure:
                     <Form.Control type="text" value={structureFilter} onChange={(e) =>
-                        setStructureFilter(e.target.value)} />
+                        setStructureFilter(e.target.value)}/>
                     Heatsinks:
                     <Form.Control type="text" value={heatFilter} onChange={(e) =>
-                        setHeatFilter(e.target.value)} />
+                        setHeatFilter(e.target.value)}/>
                     Min Walk MP:
                     <Form.Control type="text" value={walkFilter} onChange={(e) =>
-                        setWalkFilter(e.target.value)} />
+                        setWalkFilter(e.target.value)}/>
                     Min Jump MP:
                     <Form.Control type="text" value={jumpFilter} onChange={(e) =>
-                        setJumpFilter(e.target.value)} />
+                        setJumpFilter(e.target.value)}/>
                     Armor Type:
                     <Form.Control type="text" value={armorTypeFilter} onChange={(e) =>
-                        setArmorTypeFilter(e.target.value)} />
+                        setArmorTypeFilter(e.target.value)}/>
                     Min Armor Points:
                     <Form.Control type="text" value={armorPointsFilter} onChange={(e) =>
-                        setArmorPointsFilter(e.target.value)} />
+                        setArmorPointsFilter(e.target.value)}/>
                     Weapons:
                     <Form.Control type="text" value={weaponFilter} onChange={(e) =>
-                        setWeaponFilter(e.target.value)} />
+                        setWeaponFilter(e.target.value)}/>
                 </Offcanvas.Body>
             </Offcanvas>
         </>)
