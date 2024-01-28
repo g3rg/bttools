@@ -5,7 +5,7 @@ export interface WeaponType {
 }
 
 export interface UnitType {
-    id?: string;
+    mechId?: string;
     mechName: string;
     chassis?: string;
     variant?: string;

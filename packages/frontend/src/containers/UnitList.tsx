@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
+import {useEffect, useState} from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
-import {Offcanvas, Dropdown, Table} from 'react-bootstrap'
+import {Offcanvas, Dropdown, Table, } from 'react-bootstrap'
 import { useAppContext } from '../lib/contextLib'
 import { UnitType } from '../types/unit.ts'
 import './UnitList.css'
 import { Form } from 'react-bootstrap'
 
 import mechData from '../data/merged_mech_data.json'
-import Button from "react-bootstrap/Button";
+import Button from "react-bootstrap/Button"
 
 const MUL_UnitDetail_URL = `https://masterunitlist.info/Unit/Details/{id}`
 const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s={mechName}`
@@ -35,6 +35,13 @@ const rules = [
     'Unknown'
 ]
 
+const techBases = [
+    '',
+    'Inner Sphere',
+    'Clan',
+    'Mixed',
+]
+
 export default function UnitList() {
     const { isAuthenticated } = useAppContext()
     const [isLoading, setIsLoading] = useState(true)
@@ -54,6 +61,7 @@ export default function UnitList() {
     const [ruleFilter, setRuleFilter] = useState("")
 
     // advanced filters
+    const [techBaseFilter, setTextBaseFilter] = useState("")
     const [engineFilter, setEngineFilter] = useState("")
     const [structureFilter, setStructureFilter] = useState("")
     const [heatFilter, setHeatFilter] = useState("")
@@ -61,6 +69,8 @@ export default function UnitList() {
     const [jumpFilter, setJumpFilter] = useState("")
     const [armorTypeFilter, setArmorTypeFilter] = useState("")
     const [armorPointsFilter, setArmorPointsFilter] = useState("")
+    const [weaponFilter, setWeaponFilter] = useState("")
+
 
     useEffect(() => {
         async function onLoad() {
@@ -135,6 +145,12 @@ export default function UnitList() {
                 show = false
             }
         }
+        if (show && techBaseFilter !== "") {
+            let techBase = unit.techbase || ''
+            if (!(techBase.toLowerCase().indexOf(techBaseFilter.toLowerCase()) >=0)) {
+                show = false
+            }
+        }
         if (show && engineFilter !== "") {
             let unitEngine = unit.engine || ''
             if (!(unitEngine.toLowerCase().indexOf(engineFilter.toLowerCase()) >=0)) {
@@ -183,13 +199,19 @@ export default function UnitList() {
                 show = false
             }
         }
+        if (show && weaponFilter !== "") {
+            let unitWeapons = JSON.stringify(unit.weapons || '').replace(' ', '')
+            if (!(unitWeapons.toLowerCase().indexOf(weaponFilter.toLowerCase()) >=0)) {
+                show = false
+            }
+        }
 
         return show
     }
 
     function renderLinks(unit: UnitType) {
         let mechName = unit.mechName || ''
-        let mulId = unit.id || ''
+        let mulId = unit.mechId || '0'
         let mechChassis = unit.chassis || ''
         return (
             <Dropdown>
@@ -339,6 +361,16 @@ export default function UnitList() {
                 <Offcanvas.Body>
                     Faction<br/>
                     Era<br/>
+                    TechBase:
+                    <Form.Select onChange={ (e) =>
+                        setTextBaseFilter(e.target.value)
+                    }>
+                        {
+                            techBases.map( (techBase) => (
+                                <option>{techBase || ''}</option>
+                            ))}
+                    </Form.Select>
+                    <br/>
                     Engine: <input
                         type="text"
                         value={engineFilter}
@@ -391,7 +423,13 @@ export default function UnitList() {
                             setArmorPointsFilter(e.target.value)
                         }
                     /><br/>
-                    Weapons...<br/>
+                    Weapons: <input
+                        type="text"
+                        value={weaponFilter}
+                        onChange={(e) =>
+                            setWeaponFilter(e.target.value)
+                        }
+                    /><br/>
                 </Offcanvas.Body>
             </Offcanvas>
         </>)
