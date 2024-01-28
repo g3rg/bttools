@@ -15,6 +15,9 @@ const MUL_UnitDetail_URL = `https://masterunitlist.info/Unit/Details/{id}`
 const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s={mechName}`
 const Sarna_URL = `https://www.sarna.net/wiki/{mechChassis}`
 
+const MAX_BV = 5000
+const MAX_PV = 100
+
 let mechNames = Object.keys(mechData).sort()
 
 const roles = [
@@ -57,12 +60,12 @@ export default function UnitList() {
     const handleHideAdvancedFilters = () => setShowAdvancedFilters(false)
 
     const [unitFilter, setUnitFilter] = useState("")
-    const [minTonFilter, setMinTonFilter] = useState("")
-    const [maxTonFilter, setMaxTonFilter] = useState("")
-    const [minBVFilter, setMinBVFilter] = useState("")
-    const [maxBVFilter, setMaxBVFilter] = useState("")
-    const [minPVFilter, setMinPVFilter] = useState("")
-    const [maxPVFilter, setMaxPVFilter] = useState("")
+    const [minTonFilter, setMinTonFilter] = useState(0)
+    const [maxTonFilter, setMaxTonFilter] = useState(100)
+    const [minBVFilter, setMinBVFilter] = useState(0)
+    const [maxBVFilter, setMaxBVFilter] = useState(MAX_BV)
+    const [minPVFilter, setMinPVFilter] = useState(0)
+    const [maxPVFilter, setMaxPVFilter] = useState(MAX_PV)
     const [roleFilter, setRoleFilter] = useState("")
     const [ruleFilter, setRuleFilter] = useState("")
 
@@ -108,42 +111,42 @@ export default function UnitList() {
             show = false
         }
 
-        if (show && minTonFilter !== "") {
-            let minTons = parseInt(minTonFilter) // Todo Handle non-integers / force the field to be an int
+        if (show && minTonFilter > 0) {
+            let minTons = minTonFilter
             let unitTons = parseInt(unit.tons?.trim() || "50")
             if (unitTons < minTons) {
                 show = false
             }
         }
-        if (show && maxTonFilter !== "") {
-            let maxTons = parseInt(maxTonFilter) // Todo as above
+        if (show && maxTonFilter < 100) {
+            let maxTons = maxTonFilter
             let unitTons = parseInt(unit.tons?.trim() || "50")
             if (unitTons > maxTons) {
                 show = false
             }
         }
-        if (show && minBVFilter !== "") {
-            let minBV = parseInt(minBVFilter) // Todo Handle non-integers / force the field to be an int
+        if (show && minBVFilter > 0) {
+            let minBV = minBVFilter
             let unitBV = parseInt(unit.bv?.replace(',','') || "0")
             if (unitBV < minBV) {
                 show = false
             }
         }
-        if(show && maxBVFilter !== "") {
-            let maxBV = parseInt(maxBVFilter) // Todo as above
+        if(show && maxBVFilter < MAX_BV) {
+            let maxBV = maxBVFilter
             if (parseInt(unit.bv?.replace(',','') || "0") > maxBV) {
                 show = false
             }
         }
-        if (show && minPVFilter !== "") {
-            let minPV = parseInt(minPVFilter) // Todo Handle non-integers / force the field to be an int
+        if (show && minPVFilter > 0) {
+            let minPV = minPVFilter
             let unitPV = parseInt(unit.pv?.replace(',','') || "0")
             if (unitPV < minPV) {
                 show = false
             }
         }
-        if (show && maxPVFilter !== "") {
-            let maxPV = parseInt(maxPVFilter) // Todo as above
+        if (show && maxPVFilter < MAX_PV) {
+            let maxPV = maxPVFilter // Todo as above
             if (parseInt(unit.pv?.replace(',','') || "0") > maxPV) {
                 show = false
             }
@@ -276,58 +279,14 @@ export default function UnitList() {
                         />
                     </th>
                     <th>
-                        Tons<br/>
-                        <input
-                            type="text"
-                            value={minTonFilter}
-                            onChange={(e) =>
-                                setMinTonFilter(e.target.value)
-                            }
-                        />
-                        to
-                        <input
-                        type="text"
-                        value={maxTonFilter}
-                        onChange={(e) =>
-                            setMaxTonFilter(e.target.value)
-                        }
-                    />
+                        Tons
                     </th>
                     <th>
-                        BV<br/>
-                        <input
-                            type="text"
-                            value={minBVFilter}
-                            onChange={(e) =>
-                                setMinBVFilter(e.target.value)
-                            }
-                        />
-                        to
-                        <input
-                            type="text"
-                            value={maxBVFilter}
-                            onChange={(e) =>
-                                setMaxBVFilter(e.target.value)
-                            }
-                        />
+                        BV
                     </th>
-                    <th>PV
-                        <br/>
-                        <input
-                            type="text"
-                            value={minPVFilter}
-                            onChange={(e) =>
-                                setMinPVFilter(e.target.value)
-                            }
-                        />
-                        to
-                        <input
-                            type="text"
-                            value={maxPVFilter}
-                            onChange={(e) =>
-                                setMaxPVFilter(e.target.value)
-                            }
-                        /></th>
+                    <th>
+                        PV
+                    </th>
                     <th>
                         Role<br/>
                         <Form.Select onChange={ (e) =>
@@ -403,6 +362,15 @@ export default function UnitList() {
         if (techBaseFilter) {
             filterSummary += ` Tech (${techBaseFilter})`
         }
+        if (minTonFilter > 0 || maxTonFilter < 100) {
+            filterSummary += ` Tons ${minTonFilter} to ${maxTonFilter}`
+        }
+        if (minBVFilter > 0 || maxBVFilter < MAX_BV) {
+            filterSummary += ` BV ${minBVFilter} to ${maxBVFilter}`
+        }
+        if (minPVFilter > 0 || maxPVFilter < MAX_PV) {
+            filterSummary += ` PV ${minPVFilter} to ${maxPVFilter}`
+        }
         if (engineFilter) {
             filterSummary += ` Engine (${engineFilter})`
         }
@@ -434,12 +402,12 @@ export default function UnitList() {
 
     function clearAdvancedFilters() {
         setUnitFilter("")
-        setMinTonFilter("")
-        setMaxTonFilter("")
-        setMinBVFilter("")
-        setMaxBVFilter("")
-        setMinPVFilter("")
-        setMaxPVFilter("")
+        setMinTonFilter(0)
+        setMaxTonFilter(100)
+        setMinBVFilter(0)
+        setMaxBVFilter(MAX_BV)
+        setMinPVFilter(0)
+        setMaxPVFilter(MAX_PV)
         setRoleFilter("")
         setRuleFilter("")
         setFactionFilter("")
@@ -453,19 +421,19 @@ export default function UnitList() {
         setArmorTypeFilter("")
         setArmorPointsFilter("")
         setWeaponFilter("")
-        return undefined;
+        return undefined
     }
 
     function renderFilters() {
         return (<>
-            <Button onClick={handleShowAdvancedFilters} size="sm">Advanced Search</Button>
+            <Button onClick={handleShowAdvancedFilters} size="sm">Filters</Button>
             &nbsp;&nbsp;Rows { rowCount }<br/>
             <br/>
             &nbsp;Active Filters: {summariseFilters()}
 
             <Offcanvas show={showAdvancedFilters} onHide={handleHideAdvancedFilters}>
                 <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>Advanced</Offcanvas.Title>
+                    <Offcanvas.Title>Filters</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <Button onClick={clearAdvancedFilters} size='sm'>Clear Filters</Button><br/>
@@ -501,6 +469,28 @@ export default function UnitList() {
                             ))}
                     </Form.Select>
                     <br/>
+                    Tons<br/>
+                    Min: {minTonFilter}
+                    <Form.Range step="5" value={minTonFilter} onChange={(e) =>
+                        setMinTonFilter(parseInt(e.target.value))}></Form.Range>
+                    Max: {maxTonFilter}
+                    <Form.Range step="5" value={maxTonFilter} onChange={(e) =>
+                        setMaxTonFilter(parseInt(e.target.value))}></Form.Range>
+                    BV<br/>
+                    Min: {minBVFilter}
+                    <Form.Range step="100" value={minBVFilter} max={MAX_BV} onChange={(e) =>
+                        setMinBVFilter(parseInt(e.target.value))}></Form.Range>
+                    Max: {maxBVFilter}
+                    <Form.Range step="100" value={maxBVFilter} max={MAX_BV} onChange={(e) =>
+                        setMaxBVFilter(parseInt(e.target.value))}></Form.Range>
+                    PV<br/>
+                    Min: {minPVFilter}
+                    <Form.Range step="5" value={minPVFilter} max={MAX_PV} onChange={(e) =>
+                        setMinPVFilter(parseInt(e.target.value))}></Form.Range>
+                    Max: {maxPVFilter}
+                    <Form.Range step="5" value={maxPVFilter} max={MAX_PV} onChange={(e) =>
+                        setMaxPVFilter(parseInt(e.target.value))}></Form.Range>
+
                     Engine: <input
                         type="text"
                         value={engineFilter}

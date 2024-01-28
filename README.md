@@ -19,7 +19,7 @@ TODO:
 [x] Alphabetical ordering of mechs/variants
 [x] Clear advance filters button
 
-[ ] Sliders for numerical values?
+[x] Range input for numerical values
 [ ] better looking text boxes for text?
 
 [ ] mech detail modal?
