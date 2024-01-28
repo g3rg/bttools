@@ -3,13 +3,10 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import {Accordion, Dropdown, Table} from 'react-bootstrap'
 import { useAppContext } from '../lib/contextLib'
 import { UnitType } from '../types/unit.ts'
-import { mechdata } from '../mechdata.ts'
 import './UnitList.css'
 import { Form } from 'react-bootstrap'
 
 import mechData from '../data/merged_mech_data.json'
-
-const dummyData = mechdata;
 
 const MUL_UnitDetail_URL = `https://masterunitlist.info/Unit/Details/{id}`
 const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s={mechName}`
