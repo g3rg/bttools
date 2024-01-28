@@ -61,7 +61,7 @@ export default function UnitList() {
     const [ruleFilter, setRuleFilter] = useState("")
 
     // advanced filters
-    const [techBaseFilter, setTextBaseFilter] = useState("")
+    const [techBaseFilter, setTechBaseFilter] = useState("")
     const [engineFilter, setEngineFilter] = useState("")
     const [structureFilter, setStructureFilter] = useState("")
     const [heatFilter, setHeatFilter] = useState("")
@@ -172,9 +172,6 @@ export default function UnitList() {
         if (show && walkFilter !== "") {
             let minWalk = parseInt(walkFilter)
             let unitWalk = parseInt(unit.walkMP || '0')
-            if (unit.variant == 'STK-3F') {
-                console.log(`${minWalk} - ${unitWalk}`)
-            }
             if (minWalk > unitWalk) {
                 show = false
             }
@@ -362,8 +359,8 @@ export default function UnitList() {
                     Faction<br/>
                     Era<br/>
                     TechBase:
-                    <Form.Select onChange={ (e) =>
-                        setTextBaseFilter(e.target.value)
+                    <Form.Select value={techBaseFilter} onChange={ (e) =>
+                        setTechBaseFilter(e.target.value)
                     }>
                         {
                             techBases.map( (techBase) => (
