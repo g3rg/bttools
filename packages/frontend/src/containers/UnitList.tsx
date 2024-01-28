@@ -15,6 +15,8 @@ const MUL_UnitDetail_URL = `https://masterunitlist.info/Unit/Details/{id}`
 const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s={mechName}`
 const Sarna_URL = `https://www.sarna.net/wiki/{mechChassis}`
 
+let mechNames = Object.keys(mechData).sort()
+
 const roles = [
     '',
     'Ambusher',
@@ -93,6 +95,7 @@ export default function UnitList() {
     }, [isAuthenticated])
 
     useEffect( () => {
+        // @ts-ignore
         setRowCount(document.getElementById("unitTable")?.tBodies[0].rows.length);
     }, [unitFilter, minTonFilter, maxTonFilter, minBVFilter, maxBVFilter, minPVFilter, maxPVFilter,
         roleFilter, ruleFilter, factionFilter, eraFilter, techBaseFilter, engineFilter, structureFilter, heatFilter,
@@ -351,7 +354,7 @@ export default function UnitList() {
                 </tr>
                 </thead>
                 <tbody>
-                {Object.keys(units).map( (key,index) => {
+                {mechNames.map( (key,index) => {
                     let unit = units[key]
                     if (doFilter(unit)) {
                         return (
@@ -446,7 +449,7 @@ export default function UnitList() {
                     }>
                             <option></option>
                         {
-                            Object.keys(eraFactionData.factions).map( (faction) => (
+                            Object.keys(eraFactionData.factions).sort().map( (faction) => (
                                 <option>{faction || ''}</option>
                             ))}
                     </Form.Select>
@@ -457,7 +460,7 @@ export default function UnitList() {
                     }>
                             <option></option>
                         {
-                            Object.keys(eraFactionData.eras).map( (era) => (
+                            Object.keys(eraFactionData.eras).sort().map( (era) => (
                                 <option>{era || ''}</option>
                             ))}
                     </Form.Select>

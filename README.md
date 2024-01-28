@@ -16,9 +16,9 @@
 TODO:
 [x] display filter options in effect when popout thingo is closed.
 [x] display rowcount
+[x] Alphabetical ordering of mechs/variants
 
 [ ] mech detail modal?
-[ ] Alphabetical ordering of mechs/variants
 
 [ ] Clear advance filters button
 [ ] Sliders for numerical values?
@@ -28,4 +28,5 @@ TODO:
       ISLBXAC10 vs LB 10-X AC
         Do we search better? Or store better and map there?
 
-[ ] Mack it look better
+[ ] Make it look better
+[ ] Fix ts ignores properly
