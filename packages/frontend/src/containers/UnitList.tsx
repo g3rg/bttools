@@ -7,6 +7,8 @@ import { mechdata } from '../mechdata.ts'
 import './UnitList.css'
 import { Form } from 'react-bootstrap'
 
+import mechData from '../data/merged_mech_data.json'
+
 const dummyData = mechdata;
 
 const MUL_UnitDetail_URL = `https://masterunitlist.info/Unit/Details/{id}`
@@ -50,6 +52,8 @@ export default function UnitList() {
 
     useEffect(() => {
         async function onLoad() {
+            // data_url
+
             if (!isAuthenticated) {
                 setIsLoading(false)
                 return
@@ -63,7 +67,7 @@ export default function UnitList() {
     function doFilter(unit: UnitType) {
         let show = true
 
-        if (unitFilter !== "" && !(unit.name.toLowerCase().indexOf(unitFilter.toLowerCase()) >= 0)) {
+        if (unitFilter !== "" && !(unit.mechName.toLowerCase().indexOf(unitFilter.toLowerCase()) >= 0)) {
             show = false
         }
 
@@ -131,7 +135,7 @@ export default function UnitList() {
     }
 
     function renderLinks(unit: UnitType) {
-        let mechName = unit.name || ''
+        let mechName = unit.mechName || ''
         let mulId = unit.id || ''
         /*return (
             <><a target="_blank" href={MUL_UnitDetail_URL.replace('{id}', mulId)}>...</a></>
@@ -150,7 +154,7 @@ export default function UnitList() {
         )
     }
 
-    function renderUnitList(units: UnitType[]) {
+    function renderUnitList(units: { [mechName:string] : UnitType }) {
         return (
             <Table striped bordered hover size="sm" responsive="sm">
                 <thead>
@@ -223,7 +227,8 @@ export default function UnitList() {
                         <Form.Select onChange={ (e) =>
                             setRoleFilter(e.target.value)
                         }>
-                            { roles.map( (role) => (
+                            {
+                                roles.map( (role) => (
                                 <option>{role || ''}</option>
                             ))}
                         </Form.Select>
@@ -243,11 +248,12 @@ export default function UnitList() {
                 </tr>
                 </thead>
                 <tbody>
-                {units.map((unit) => {
+                {Object.keys(units).map( (key,index) => {
+                    let unit = units[key]
                     if (doFilter(unit)) {
                         return (
-                            <tr>
-                                <td>{unit.name}</td>
+                            <tr key={index}>
+                                <td>{unit.mechName}</td>
                                 <td>{unit.tons}</td>
                                 <td>{unit.bv}</td>
                                 <td>{unit.pv}</td>
@@ -268,7 +274,7 @@ export default function UnitList() {
     function renderUnits() {
         return (
             <div className="units">
-                <ListGroup>{!isLoading && renderUnitList(dummyData)}</ListGroup>
+                <ListGroup>{!isLoading && renderUnitList(mechData)}</ListGroup>
             </div>
         )
     }
