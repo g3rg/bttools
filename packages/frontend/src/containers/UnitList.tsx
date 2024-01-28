@@ -7,6 +7,8 @@ import './UnitList.css'
 import { Form } from 'react-bootstrap'
 
 import mechData from '../data/merged_mech_data.json'
+import eraFactionData from '../data/mech_era_faction.json'
+
 import Button from "react-bootstrap/Button"
 
 const MUL_UnitDetail_URL = `https://masterunitlist.info/Unit/Details/{id}`
@@ -61,6 +63,8 @@ export default function UnitList() {
     const [ruleFilter, setRuleFilter] = useState("")
 
     // advanced filters
+    const [factionFilter, setFactionFilter] = useState("")
+    const [eraFilter, setEraFilter] = useState("")
     const [techBaseFilter, setTechBaseFilter] = useState("")
     const [engineFilter, setEngineFilter] = useState("")
     const [structureFilter, setStructureFilter] = useState("")
@@ -145,6 +149,31 @@ export default function UnitList() {
                 show = false
             }
         }
+
+        if (show && factionFilter !== "" && eraFilter !== "") {
+
+            let factionEraKey = factionFilter + ":" + eraFilter
+            // @ts-ignore
+            if (!eraFactionData['factionEras'][factionEraKey]?.includes(unit.mechId)) {
+                show = false
+            }
+        } else {
+            if (show && factionFilter !== "") {
+                // @ts-ignore
+                if (!eraFactionData['factions'][factionFilter]?.includes(unit.mechId)) {
+                    show = false
+                }
+            }
+            if (show && eraFilter !== "") {
+                // @ts-ignore
+                if (!eraFactionData['eras'][eraFilter]?.includes(unit.mechId)) {
+                    show = false
+                }
+            }
+        }
+
+
+
         if (show && techBaseFilter !== "") {
             let techBase = unit.techbase || ''
             if (!(techBase.toLowerCase().indexOf(techBaseFilter.toLowerCase()) >=0)) {
@@ -356,10 +385,22 @@ export default function UnitList() {
                     <Offcanvas.Title>Advanced</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                    Faction<br/>
-                    Era<br/>
+                    Faction: <input
+                        type="text"
+                        value={factionFilter}
+                        onChange={(e) =>
+                            setFactionFilter(e.target.value)
+                        }
+                    /><br/>
+                    Era: <input
+                        type="text"
+                        value={eraFilter}
+                        onChange={(e) =>
+                            setEraFilter(e.target.value)
+                        }
+                    /><br/>
                     TechBase:
-                    <Form.Select value={techBaseFilter} onChange={ (e) =>
+                    <Form.Select value={techBaseFilter} onChange={(e) =>
                         setTechBaseFilter(e.target.value)
                     }>
                         {

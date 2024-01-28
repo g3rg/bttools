@@ -13,3 +13,13 @@
 * Deploy to Prod
   * pnpm sst deploy --stage prod
 
+
+
+
+TODO:
+[ ] Sliders for numerical values?
+[ ] better looking text boxes for text
+[ ] "select" control for faction, era
+[ ] view all details on a mech
+[ ] More intelligent linking to Flechs, e.g. Clan mechs tend to not include bracket?
+[ ] 
