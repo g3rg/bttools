@@ -278,15 +278,9 @@ export default function UnitList() {
                             }
                         />
                     </th>
-                    <th>
-                        Tons
-                    </th>
-                    <th>
-                        BV
-                    </th>
-                    <th>
-                        PV
-                    </th>
+                    <th>Tons</th>
+                    <th>BV</th>
+                    <th>PV</th>
                     <th>
                         Role<br/>
                         <Form.Select onChange={ (e) =>
@@ -400,7 +394,7 @@ export default function UnitList() {
     }
 
 
-    function clearAdvancedFilters() {
+    function clearFilters() {
         setUnitFilter("")
         setMinTonFilter(0)
         setMaxTonFilter(100)
@@ -436,7 +430,7 @@ export default function UnitList() {
                     <Offcanvas.Title>Filters</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                    <Button onClick={clearAdvancedFilters} size='sm'>Clear Filters</Button><br/>
+                    <Button onClick={clearFilters} size='sm'>Clear Filters</Button><br/>
                     Faction:
                     <Form.Select value={factionFilter} onChange={(e) =>
                         setFactionFilter(e.target.value)
@@ -491,65 +485,30 @@ export default function UnitList() {
                     <Form.Range step="5" value={maxPVFilter} max={MAX_PV} onChange={(e) =>
                         setMaxPVFilter(parseInt(e.target.value))}></Form.Range>
 
-                    Engine: <input
-                        type="text"
-                        value={engineFilter}
-                        onChange={(e) =>
-                            setEngineFilter(e.target.value)
-                        }
-                    /><br/>
-                        Structure: <input
-                        type="text"
-                        value={structureFilter}
-                        onChange={(e) =>
-                            setStructureFilter(e.target.value)
-                        }
-                    /><br/>
-                        Heatsinks: <input
-                        type="text"
-                        value={heatFilter}
-                        onChange={(e) =>
-                            setHeatFilter(e.target.value)
-                        }
-                    /><br/>
-                        Min Walk MP: <input
-                        type="text"
-                        value={walkFilter}
-                        onChange={(e) =>
-                            setWalkFilter(e.target.value)
-                        }
-                    />
-                        <br/>
-                        Min Jump MP:<input
-                        type="text"
-                        value={jumpFilter}
-                        onChange={(e) =>
-                            setJumpFilter(e.target.value)
-                        }
-                    />
-                        <br/>
-                        Armor Type:<input
-                        type="text"
-                        value={armorTypeFilter}
-                        onChange={(e) =>
-                            setArmorTypeFilter(e.target.value)
-                        }
-                    />
-                    <br/>
-                    Min Armor Points:<input
-                        type="text"
-                        value={armorPointsFilter}
-                        onChange={(e) =>
-                            setArmorPointsFilter(e.target.value)
-                        }
-                    /><br/>
-                    Weapons: <input
-                        type="text"
-                        value={weaponFilter}
-                        onChange={(e) =>
-                            setWeaponFilter(e.target.value)
-                        }
-                    /><br/>
+                    Engine:
+                    <Form.Control type="text" value={engineFilter} onChange={(e) =>
+                        setEngineFilter(e.target.value)} />
+                    Structure:
+                    <Form.Control type="text" value={structureFilter} onChange={(e) =>
+                        setStructureFilter(e.target.value)} />
+                    Heatsinks:
+                    <Form.Control type="text" value={heatFilter} onChange={(e) =>
+                        setHeatFilter(e.target.value)} />
+                    Min Walk MP:
+                    <Form.Control type="text" value={walkFilter} onChange={(e) =>
+                        setWalkFilter(e.target.value)} />
+                    Min Jump MP:
+                    <Form.Control type="text" value={jumpFilter} onChange={(e) =>
+                        setJumpFilter(e.target.value)} />
+                    Armor Type:
+                    <Form.Control type="text" value={armorTypeFilter} onChange={(e) =>
+                        setArmorTypeFilter(e.target.value)} />
+                    Min Armor Points:
+                    <Form.Control type="text" value={armorPointsFilter} onChange={(e) =>
+                        setArmorPointsFilter(e.target.value)} />
+                    Weapons:
+                    <Form.Control type="text" value={weaponFilter} onChange={(e) =>
+                        setWeaponFilter(e.target.value)} />
                 </Offcanvas.Body>
             </Offcanvas>
         </>)

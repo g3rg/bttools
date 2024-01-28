@@ -21,6 +21,7 @@ TODO:
 
 [x] Range input for numerical values
 [ ] better looking text boxes for text?
+[ ] delay / async filtering
 
 [ ] mech detail modal?
 
