@@ -21,8 +21,7 @@ TODO:
 
 [x] Range input for numerical values
 [x] better looking text boxes for text?
-
-[ ] Role 'Jugernaut' bug...
+[x] Role 'Jugernaut' bug...
 
 [ ] mech detail modal?
 

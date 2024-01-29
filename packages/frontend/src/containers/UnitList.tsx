@@ -6,6 +6,8 @@ import { UnitType } from '../types/unit.ts'
 import './UnitList.css'
 import { Form } from 'react-bootstrap'
 
+import UnitDetail from './UnitDetail.tsx'
+
 import mechData from '../data/merged_mech_data.json'
 import eraFactionData from '../data/mech_era_faction.json'
 
@@ -58,6 +60,8 @@ export default function UnitList() {
 
     const handleShowAdvancedFilters = () => setShowAdvancedFilters(true)
     const handleHideAdvancedFilters = () => setShowAdvancedFilters(false)
+
+    const [currentUnit, setCurrentUnit] = useState<UnitType>()
 
     const [unitFilter, setUnitFilter] = useState("")
     const [minTonFilter, setMinTonFilter] = useState(0)
@@ -265,44 +269,47 @@ export default function UnitList() {
 
     function renderUnitList(units: { [mechName:string] : UnitType }) {
         return (
-            <Table id="unitTable" striped bordered hover size="sm" responsive="sm">
-                <thead>
-                <tr>
-                    <th>
-                        Unit
-                        <Form.Control type="text" value={unitFilter} onChange={(e) =>
-                            setUnitFilter(e.target.value)}/>
-                    </th>
-                    <th>Tons</th>
-                    <th>BV</th>
-                    <th>PV</th>
-                    <th>Role</th>
-                    <th>Rules</th>
-                    <th>Intro</th>
-                    <th>Links</th>
-                </tr>
-                </thead>
-                <tbody>
-                {mechNames.map( (key,index) => {
-                    let unit = units[key]
-                    if (doFilter(unit)) {
-                        return (
-                            <tr key={index}>
-                                <td>{unit.mechName}</td>
-                                <td>{unit.tons}</td>
-                                <td>{unit.bv}</td>
-                                <td>{unit.pv}</td>
-                                <td>{unit.role}</td>
-                                <td>{unit.rules}</td>
-                                <td>{unit.intro}</td>
-                                <td>{ renderLinks(unit) }</td>
-                            </tr>)
-                    } else {
-                        return (<></>)
-                    }
-                })}
-                </tbody>
-            </Table>
+            <>
+                { renderUnitDetailPanel() }
+                <Table id="unitTable" striped bordered hover size="sm" responsive="sm">
+                    <thead>
+                    <tr>
+                        <th>
+                            Unit
+                            <Form.Control type="text" value={unitFilter} onChange={(e) =>
+                                setUnitFilter(e.target.value)}/>
+                        </th>
+                        <th>Tons</th>
+                        <th>BV</th>
+                        <th>PV</th>
+                        <th>Role</th>
+                        <th>Rules</th>
+                        <th>Intro</th>
+                        <th>Links</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {mechNames.map( (key,index) => {
+                        let unit = units[key]
+                        if (doFilter(unit)) {
+                            return (
+                                <tr key={index}>
+                                    <td onClick={() => setCurrentUnit(unit)}>{unit.mechName}</td>
+                                    <td>{unit.tons}</td>
+                                    <td>{unit.bv}</td>
+                                    <td>{unit.pv}</td>
+                                    <td>{unit.role}</td>
+                                    <td>{unit.rules}</td>
+                                    <td>{unit.intro}</td>
+                                    <td>{ renderLinks(unit) }</td>
+                                </tr>)
+                        } else {
+                            return (<></>)
+                        }
+                    })}
+                    </tbody>
+                </Table>
+            </>
         )
     }
 
@@ -500,6 +507,19 @@ export default function UnitList() {
                 </Offcanvas.Body>
             </Offcanvas>
         </>)
+    }
+
+    function renderUnitDetailPanel() {
+        return (
+            <Offcanvas show={currentUnit} onHide={ () => setCurrentUnit(undefined)}>
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Mech Name</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    <UnitDetail unit={currentUnit}/>
+                </Offcanvas.Body>
+            </Offcanvas>
+        )
     }
 
     return (
