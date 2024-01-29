@@ -24,7 +24,7 @@ const roles = [
     '',
     'Ambusher',
     'Brawler',
-    'Jugernaut',
+    'Juggernaut',
     'Missile Boat',
     'None',
     'Skirmisher',
