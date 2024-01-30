@@ -1,10 +1,12 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
-import {Offcanvas, Dropdown, Table, Row, Col,} from 'react-bootstrap'
+import { Offcanvas, Dropdown, Table, Row, Col } from 'react-bootstrap'
 import { useAppContext } from '../lib/contextLib'
 import { UnitType } from '../types/unit.ts'
+import { ForceType, ForceUnit } from '../types/force.ts'
 import './UnitList.css'
 import { Form } from 'react-bootstrap'
+import { v4 as uuidv4 } from 'uuid'
 
 import UnitDetail from './UnitDetail.tsx'
 
@@ -12,6 +14,8 @@ import mechData from '../data/merged_mech_data.json'
 import eraFactionData from '../data/mul_mech_era_faction.json'
 
 import Button from "react-bootstrap/Button"
+import {FaMinus, FaPlus} from "react-icons/fa";
+import {FaDeleteLeft} from "react-icons/fa6";
 
 const MUL_UnitDetail_URL = `https://masterunitlist.info/Unit/Details/{id}`
 const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s={mechName}`
@@ -74,11 +78,15 @@ export default function UnitList() {
     const { isAuthenticated } = useAppContext()
     const [isLoading, setIsLoading] = useState(true)
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
+    const [showForce, setShowForce] = useState(false)
 
     const [rowCount, setRowCount] = useState(0)
 
     const handleShowAdvancedFilters = () => setShowAdvancedFilters(true)
     const handleHideAdvancedFilters = () => setShowAdvancedFilters(false)
+
+    const handleShowForce = () => setShowForce(true)
+    const handleHideForce = () => setShowForce(false)
 
     const [currentUnit, setCurrentUnit] = useState<UnitType>()
 
@@ -106,6 +114,8 @@ export default function UnitList() {
     const [armorTypeFilter, setArmorTypeFilter] = useState("")
     const [armorPointsFilter, setArmorPointsFilter] = useState("")
     const [weaponFilter, setWeaponFilter] = useState("")
+
+    const [force, setForce] = useState<ForceType>({units:[]})
 
 
     useEffect(() => {
@@ -287,6 +297,34 @@ export default function UnitList() {
         )
     }
 
+    function addUnitToForce(unit: UnitType) {
+        let fUnit = {
+            id: uuidv4(),
+            unit: unit,
+            gunnerySkill: mechwarriorGunnerySkill,
+            pilotSkill: mechwarriorPilotSkill,
+            alphaSkill: 4,
+        }
+        force.units.push(fUnit)
+        setForce(force)
+    }
+
+    function removeUnitFromForce(unit: ForceUnit) {
+        let units: ForceUnit[] =[]
+        force.units.forEach( (fUnit) => {
+            if (unit.id != fUnit.id) {
+                units.push(fUnit)
+            }
+        })
+        setForce({ units })
+    }
+
+    function renderAddToForce(unit: UnitType) {
+        return (
+            <Button onClick={()=> addUnitToForce(unit)}><FaPlus/></Button>
+        )
+    }
+
     function renderUnitList(units: { [mechName:string] : UnitType }) {
 
         return (
@@ -307,6 +345,7 @@ export default function UnitList() {
                         <th>Rules</th>
                         <th>Intro</th>
                         <th>Links</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -323,6 +362,7 @@ export default function UnitList() {
                                     <td>{unit.rules}</td>
                                     <td>{unit.intro}</td>
                                     <td>{ renderLinks(unit) }</td>
+                                    <td>{ renderAddToForce(unit) }</td>
                                 </tr>)
                         } else {
                             return (<></>)
@@ -425,8 +465,9 @@ export default function UnitList() {
 
     function renderFilters() {
         return (<>
+            <Button onClick={handleShowForce} size="sm">Force</Button>
             <Button onClick={handleShowAdvancedFilters} size="sm">Filters</Button>
-            &nbsp;&nbsp;Rows { rowCount }<br/>
+            &nbsp;&nbsp;Rows { rowCount }, Force Size { force.units.length }<br/>
             <br/>
             &nbsp;Active Filters: {summariseFilters()}
 
@@ -564,9 +605,51 @@ export default function UnitList() {
         )
     }
 
+    function renderForcePanel() {
+        return (
+            <Offcanvas show={showForce} onHide={handleHideForce} placement="end">
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Force Builder</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    <Table id="forceTable" striped bordered hover size="sm" responsive="sm">
+                        <thead>
+                        <tr>
+                            <th>Unit</th>
+                            <th>Skill</th>
+                            <th>BV (?/?)</th>
+                            <th><Button size="sm"><FaDeleteLeft/></Button></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                    Units:{force.units.length}
+                    { force.units.map( (forceUnit) => {
+                        return (
+                            <tr>
+                                <td>{forceUnit.unit.mechName}</td>
+                                <td>{forceUnit.gunnerySkill}/{forceUnit.pilotSkill}</td>
+                                <td>{forceUnit.unit.bv}</td>
+                                <td><Button size="sm" onClick={()=>removeUnitFromForce(forceUnit)}><FaMinus/></Button></td>
+                            </tr>
+                        )
+                    })}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Total</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </Table>
+                </Offcanvas.Body>
+            </Offcanvas>
+        )
+    }
+
     return (
         <div className="Home">
             {renderFilters()}
+            {renderForcePanel()}
             {renderUnits()}
         </div>
     )
