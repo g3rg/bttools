@@ -9,7 +9,7 @@ import { Form } from 'react-bootstrap'
 import UnitDetail from './UnitDetail.tsx'
 
 import mechData from '../data/merged_mech_data.json'
-import eraFactionData from '../data/mech_era_faction.json'
+import eraFactionData from '../data/mul_mech_era_faction.json'
 
 import Button from "react-bootstrap/Button"
 
@@ -209,7 +209,7 @@ export default function UnitList() {
             }
         }
         if (show && heatFilter !== "") {
-            let unitHeat = unit.heatSinks || ''
+            let unitHeat = unit?.heatSinks?.count + ' ' + unit?.heatSinks?.type
             if (!(unitHeat.toLowerCase().indexOf(heatFilter.toLowerCase()) >=0)) {
                 show = false
             }

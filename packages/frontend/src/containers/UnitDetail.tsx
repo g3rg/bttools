@@ -20,6 +20,8 @@ export default function UnitDetail( props : UnitProps) {
             )
     }
 
+    const heatSinks = unit?.heatSinks?.count + ' ' + unit?.heatSinks?.type
+
     return (
         <>
             {renderField('Chassis', unit?.chassis)}
@@ -38,7 +40,7 @@ export default function UnitDetail( props : UnitProps) {
             {renderField('Cockpit', unit?.cockpit)}
             {renderField('Gyro', unit?.gyro)}
             {renderField('Ejection', unit?.ejection)}
-            {renderField('Heat Sinks', unit?.heatSinks)}
+            {renderField('Heat Sinks', heatSinks)}
             {renderField('Walk MP', unit?.walkMP)}
             {renderField('Jump MP', unit?.jumpMP)}
             {renderField('Armor Type', unit?.armorType)}

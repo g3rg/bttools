@@ -4,6 +4,11 @@ export interface WeaponType {
     ammo?: string;
 }
 
+export interface HeatSinks {
+    type?: string;
+    count?: number;
+}
+
 export interface UnitType {
     mechId?: string;
     mechName: string;
@@ -25,7 +30,7 @@ export interface UnitType {
     cockpit?: string;
     gyro?: string;
     ejection?: string;
-    heatSinks?: string;
+    heatSinks?: HeatSinks;
     walkMP?: string;
     jumpMP?: string;
     armorType?: string;
