@@ -25,13 +25,23 @@ TODO:
 
 [x] mech detail
 
-[ ] delay / async filtering?
+[x] Filter by calculated BV based on Pilot/Gunnery Skills...
+[x] Filter by calculated PV based on pilot skill
 
+[ ] delay / async filtering?
 [ ] More intelligent linking to Flechs, e.g. Clan mechs tend to not include bracket?
 
 [ ] Weapons Search 
       ISLBXAC10 vs LB 10-X AC
         Do we search better? Or store better and map there?
+
+[ ] Weapon stats searching
+    * Alpha Strike max damage
+    * Max damage at range
+    * Avg dmg calculator?
+    * Rear weapons?
+    * flippy arms
+
 
 [ ] Make it look better
 

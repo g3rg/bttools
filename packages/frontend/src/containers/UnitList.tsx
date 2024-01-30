@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
-import {Offcanvas, Dropdown, Table, } from 'react-bootstrap'
+import {Offcanvas, Dropdown, Table, Row, Col,} from 'react-bootstrap'
 import { useAppContext } from '../lib/contextLib'
 import { UnitType } from '../types/unit.ts'
 import './UnitList.css'
@@ -51,6 +51,25 @@ const techBases = [
     'Mixed',
 ]
 
+const BV_Pilot_Adjustments =
+    [
+        [2.42, 2.31, 2.21, 2.10, 1.93, 1.75, 1.68, 1.59, 1.50],
+        [2.21, 2.11, 2.02, 1.92, 1.76, 1.60, 1.54, 1.46, 1.38],
+        [1.93, 1.85, 1.76, 1.68, 1.54, 1.40, 1.35, 1.28, 1.21],
+        [1.66, 1.58, 1.51, 1.44, 1.32, 1.20, 1.16, 1.10, 1.04],
+        [1.38, 1.32, 1.26, 1.20, 1.10, 1.00, 0.95, 0.90, 0.85],
+        [1.31, 1.19, 1.13, 1.08, 0.99, 0.90, 0.86, 0.81, 0.77],
+        [1.24, 1.12, 1.07, 1.02, 0.94, 0.85, 0.81, 0.77, 0.72],
+        [1.17, 1.06, 1.01, 0.96, 0.88, 0.80, 0.76, 0.72, 0.68],
+        [1.10, 0.99, 0.95, 0.90, 0.83, 0.75, 0.71, 0.68, 0.64],
+    ]
+
+function adjustBV(bv: string|undefined, gunSkill:number, pilotSkill:number) {
+    const unitBV = Math.round(parseInt(bv?.replace(',','') || "0") *
+        BV_Pilot_Adjustments[gunSkill][pilotSkill])
+    return unitBV
+}
+
 export default function UnitList() {
     const { isAuthenticated } = useAppContext()
     const [isLoading, setIsLoading] = useState(true)
@@ -66,6 +85,8 @@ export default function UnitList() {
     const [unitFilter, setUnitFilter] = useState("")
     const [minTonFilter, setMinTonFilter] = useState(0)
     const [maxTonFilter, setMaxTonFilter] = useState(100)
+    const [mechwarriorGunnerySkill, setMechwarriorGunnerySkill] = useState(4)
+    const [mechwarriorPilotSkill, setMechwarriorPilotSkill] = useState(5)
     const [minBVFilter, setMinBVFilter] = useState(0)
     const [maxBVFilter, setMaxBVFilter] = useState(MAX_BV)
     const [minPVFilter, setMinPVFilter] = useState(0)
@@ -131,14 +152,13 @@ export default function UnitList() {
         }
         if (show && minBVFilter > 0) {
             let minBV = minBVFilter
-            let unitBV = parseInt(unit.bv?.replace(',','') || "0")
-            if (unitBV < minBV) {
+            if (adjustBV(unit.bv, mechwarriorGunnerySkill, mechwarriorPilotSkill) < minBV) {
                 show = false
             }
         }
         if(show && maxBVFilter < MAX_BV) {
             let maxBV = maxBVFilter
-            if (parseInt(unit.bv?.replace(',','') || "0") > maxBV) {
+            if (adjustBV(unit.bv, mechwarriorGunnerySkill, mechwarriorPilotSkill) > maxBV) {
                 show = false
             }
         }
@@ -268,6 +288,7 @@ export default function UnitList() {
     }
 
     function renderUnitList(units: { [mechName:string] : UnitType }) {
+
         return (
             <>
                 { renderUnitDetailPanel() }
@@ -280,7 +301,7 @@ export default function UnitList() {
                                 setUnitFilter(e.target.value)}/>
                         </th>
                         <th>Tons</th>
-                        <th>BV</th>
+                        <th>BV ({mechwarriorGunnerySkill}/{mechwarriorPilotSkill})</th>
                         <th>PV</th>
                         <th>Role</th>
                         <th>Rules</th>
@@ -296,7 +317,7 @@ export default function UnitList() {
                                 <tr key={index}>
                                     <td onClick={() => setCurrentUnit(unit)}>{unit.mechName}</td>
                                     <td>{unit.tons}</td>
-                                    <td>{unit.bv}</td>
+                                    <td>{adjustBV(unit?.bv, mechwarriorGunnerySkill,mechwarriorPilotSkill)}</td>
                                     <td>{unit.pv}</td>
                                     <td>{unit.role}</td>
                                     <td>{unit.rules}</td>
@@ -380,6 +401,8 @@ export default function UnitList() {
         setUnitFilter("")
         setMinTonFilter(0)
         setMaxTonFilter(100)
+        setMechwarriorGunnerySkill(4)
+        setMechwarriorPilotSkill(5)
         setMinBVFilter(0)
         setMaxBVFilter(MAX_BV)
         setMinPVFilter(0)
@@ -467,6 +490,25 @@ export default function UnitList() {
                     Max: {maxTonFilter}
                     <Form.Range step="5" value={maxTonFilter} onChange={(e) =>
                         setMaxTonFilter(parseInt(e.target.value))}></Form.Range>
+                    Mechwarrior:
+                    <Row>
+                        <Col>
+                            <Form.Select size="sm" value={mechwarriorGunnerySkill} onChange={(e) =>
+                                setMechwarriorGunnerySkill(parseInt(e.target.value))} >
+                                <option>0</option><option>1</option><option>2</option>
+                                <option>3</option><option>4</option><option>5</option>
+                                <option>6</option><option>7</option><option>8</option>
+                            </Form.Select>
+                        </Col>
+                        <Col>
+                        <Form.Select size="sm" value={mechwarriorPilotSkill} onChange={(e) =>
+                            setMechwarriorPilotSkill(parseInt(e.target.value))} >
+                            <option>0</option><option>1</option><option>2</option>
+                            <option>3</option><option>4</option><option>5</option>
+                            <option>6</option><option>7</option><option>8</option>
+                        </Form.Select>
+                        </Col>
+                    </Row>
                     BV Min: {minBVFilter}
                     <Form.Range step="100" value={minBVFilter} max={MAX_BV} onChange={(e) =>
                         setMinBVFilter(parseInt(e.target.value))}></Form.Range>
