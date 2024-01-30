@@ -6,6 +6,8 @@ import Signup from './containers/Signup.tsx'
 import NewNote from './containers/NewNote.tsx'
 import Notes from './containers/Notes.tsx'
 import UnitList from './containers/UnitList.tsx'
+import MechStats from './containers/MechStats.tsx'
+
 import UnauthenticatedRoute from './containers/UnuthenticatedRoute.tsx'
 import AuthenticatedRoute from './containers/AuthenticatedRoute.tsx'
 
@@ -33,6 +35,12 @@ export default function Links() {
                 path="/units"
                 element={
                         <UnitList />
+                }
+            />
+            <Route
+                path="/stats"
+                element={
+                    <MechStats />
                 }
             />
 

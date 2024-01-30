@@ -23,7 +23,7 @@ TODO:
 [x] better looking text boxes for text?
 [x] Role 'Jugernaut' bug...
 
-[ ] mech detail modal?
+[x] mech detail
 
 [ ] delay / async filtering?
 
