@@ -14,8 +14,7 @@ import mechData from '../data/merged_mech_data.json'
 import eraFactionData from '../data/mul_mech_era_faction.json'
 
 import Button from "react-bootstrap/Button"
-import {FaMinus, FaPlus} from "react-icons/fa";
-import {FaDeleteLeft} from "react-icons/fa6";
+import {FaMinus, FaPlus} from "react-icons/fa"
 
 const MUL_UnitDetail_URL = `https://masterunitlist.info/Unit/Details/{id}`
 const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s={mechName}`
@@ -618,7 +617,7 @@ export default function UnitList() {
                             <th>Unit</th>
                             <th>Skill</th>
                             <th>BV (?/?)</th>
-                            <th><Button size="sm"><FaDeleteLeft/></Button></th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>

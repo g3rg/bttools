@@ -1,7 +1,7 @@
 import { UnitType } from './unit.ts'
 
 export interface ForceUnit {
-    id: number,
+    id: string,
     unit: UnitType,
     gunnerySkill: number,
     pilotSkill: number,
