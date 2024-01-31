@@ -71,7 +71,7 @@ export default function UnitList() {
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
     const [showForce, setShowForce] = useState(false)
 
-    const [rowCount, setRowCount] = useState(0)
+    const [rowCount, setRowCount] = useState(Object.keys(mechData).length)
 
     const handleShowAdvancedFilters = () => setShowAdvancedFilters(true)
     const handleHideAdvancedFilters = () => setShowAdvancedFilters(false)
