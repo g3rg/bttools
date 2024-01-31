@@ -1,4 +1,4 @@
-import {Offcanvas, Table} from "react-bootstrap"
+import {Col, Form, Offcanvas, Row, Table} from "react-bootstrap"
 import {calculateBV} from "../lib/battletech.ts"
 import Button from "react-bootstrap/Button"
 import {FaMinus} from "react-icons/fa"
@@ -9,10 +9,17 @@ interface ForceListProps {
     force: ForceType
     handleHideForce: ()=>void
     removeUnitFromForce: (fUnit: ForceUnit) => void
+    updateForceUnitGunnery: (id: string, newSkill: number) => void
+    updateForceUnitPiloting: (id: string, newSkill: number) => void
+}
+
+function parseDropDownAsNumber(e:  React.ChangeEvent<HTMLSelectElement>) {
+    return parseInt(e.target.value || '0')
 }
 
 export default function ForceList( props : ForceListProps) {
-    let { showForce, force, handleHideForce, removeUnitFromForce } = props
+    let { showForce, force, handleHideForce, removeUnitFromForce,
+        updateForceUnitGunnery, updateForceUnitPiloting } = props
 
     return (
         <Offcanvas show={showForce} onHide={handleHideForce} placement="end">
@@ -25,8 +32,8 @@ export default function ForceList( props : ForceListProps) {
                     <thead>
                     <tr>
                         <th>Unit</th>
-                        <th>Skill</th>
-                        <th>BV (?/?)</th>
+                        <th>Skill (G/P)</th>
+                        <th>BV</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -37,7 +44,26 @@ export default function ForceList( props : ForceListProps) {
                         return (
                             <tr key={forceUnit.id}>
                                 <td>{forceUnit.unit.mechName}</td>
-                                <td>{forceUnit.gunnerySkill}/{forceUnit.pilotSkill}</td>
+                                <td>
+                                    <Row>
+                                        <Col>
+                                            <Form.Select size="sm" value={forceUnit.gunnerySkill}
+                                                onChange={ (e) => updateForceUnitGunnery(forceUnit.id, parseDropDownAsNumber(e))}>
+                                                <option>0</option><option>1</option><option>2</option>
+                                                <option>3</option><option>4</option><option>5</option>
+                                                <option>6</option><option>7</option><option>8</option>
+                                            </Form.Select>
+                                        </Col>
+                                        <Col>
+                                            <Form.Select size="sm" value={forceUnit.pilotSkill}
+                                                 onChange={ (e) => updateForceUnitPiloting(forceUnit.id, parseDropDownAsNumber(e))}>
+                                                <option>0</option><option>1</option><option>2</option>
+                                                <option>3</option><option>4</option><option>5</option>
+                                                <option>6</option><option>7</option><option>8</option>
+                                            </Form.Select>
+                                        </Col>
+                                    </Row>
+                                </td>
                                 <td>{calculateBV(forceUnit.unit.bv || '0', forceUnit.gunnerySkill, forceUnit.pilotSkill)}</td>
                                 <td><Button size="sm" onClick={()=>removeUnitFromForce(forceUnit)}><FaMinus/></Button></td>
                             </tr>

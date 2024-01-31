@@ -310,12 +310,40 @@ export default function UnitList() {
     }
 
     function removeUnitFromForce(unit: ForceUnit) {
-        let units: ForceUnit[] =[]
+        let units: ForceUnit[] = []
         force.units.forEach( (fUnit) => {
             if (unit.id != fUnit.id) {
                 units.push(fUnit)
             }
         })
+        let newForce = new ForceType(units)
+        localStorage.setItem("force", JSON.stringify(newForce))
+        setForce(newForce)
+    }
+
+    function updateForceUnitGunnery(id: string, newSkill: number) {
+        let units: ForceUnit[] = []
+        force.units.forEach((fUnit) => {
+            if (id == fUnit.id) {
+                fUnit.gunnerySkill = newSkill
+            }
+            units.push(fUnit)
+        })
+
+        let newForce = new ForceType(units)
+        localStorage.setItem("force", JSON.stringify(newForce))
+        setForce(newForce)
+    }
+
+    function updateForceUnitPilot(id: string, newSkill: number) {
+        let units: ForceUnit[] = []
+        force.units.forEach((fUnit) => {
+            if (id == fUnit.id) {
+                fUnit.pilotSkill = newSkill
+            }
+            units.push(fUnit)
+        })
+
         let newForce = new ForceType(units)
         localStorage.setItem("force", JSON.stringify(newForce))
         setForce(newForce)
@@ -610,7 +638,8 @@ export default function UnitList() {
     return (
         <div className="Home">
             {renderFilters()}
-            <ForceList force={force} handleHideForce={handleHideForce} removeUnitFromForce={removeUnitFromForce} showForce={showForce}/>
+            <ForceList force={force} handleHideForce={handleHideForce} removeUnitFromForce={removeUnitFromForce}
+                       showForce={showForce} updateForceUnitGunnery={updateForceUnitGunnery} updateForceUnitPiloting={updateForceUnitPilot}/>
             {renderUnits()}
         </div>
     )

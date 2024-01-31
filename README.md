@@ -33,13 +33,11 @@ TODO:
 [x] Force Builder - add / remove
 [x] Force Builder - total up BV
 [x] Force Builder - Move force builder to new component
-[ ] Force Builder - save to cookies and add to onLoad
+[x] Force Builder - save to cookies and add to onLoad
 
 [ ] Force Builder - change mechwarrior skills
-[ ] Force builder - better way of opening than stupid button?
-[ ] Force builder - save to server when logged in / select force modal
-
 [ ] Cut up the unit page into smaller components!
+[ ] Force builder - save to server when logged in / select force modal
 
 
 SHARE WITH VAULT DISCORD?
