@@ -467,7 +467,7 @@ export default function UnitList() {
 
     function renderFilters() {
         return (<>
-            <Button onClick={handleShowForce} size="sm">Force</Button>
+            <Button onClick={handleShowForce} size="sm">Force</Button>&nbsp;&nbsp;
             <Button onClick={handleShowAdvancedFilters} size="sm">Filters</Button>
             &nbsp;&nbsp;Rows { rowCount }, Force Size { force.units.length }<br/>
             <br/>
