@@ -1,4 +1,5 @@
 import { UnitType } from './unit.ts'
+import { calculateBV } from '../lib/battletech.ts'
 
 export interface ForceUnit {
     id: string,
@@ -8,6 +9,21 @@ export interface ForceUnit {
     alphaSkill: number,
 }
 
-export interface ForceType {
+export class ForceType {
     units: ForceUnit[]
+
+
+    constructor(units?: ForceUnit[]) {
+        this.units = units || []
+    }
+
+    calculateBV(): number {
+        let total = 0
+        this.units.forEach((fUnit) => {
+            console.log(fUnit.unit.bv)
+            total += calculateBV(fUnit.unit.bv || '0', fUnit.gunnerySkill, fUnit.pilotSkill)
+        })
+
+        return Math.round(total)
+    }
 }

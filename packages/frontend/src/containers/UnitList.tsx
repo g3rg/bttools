@@ -9,6 +9,7 @@ import { Form } from 'react-bootstrap'
 import { v4 as uuidv4 } from 'uuid'
 
 import UnitDetail from './UnitDetail.tsx'
+import {BV_Pilot_Adjustments, calculateBV} from '../lib/battletech.ts'
 
 import mechData from '../data/merged_mech_data.json'
 import eraFactionData from '../data/mul_mech_era_faction.json'
@@ -54,18 +55,7 @@ const techBases = [
     'Mixed',
 ]
 
-const BV_Pilot_Adjustments =
-    [
-        [2.42, 2.31, 2.21, 2.10, 1.93, 1.75, 1.68, 1.59, 1.50],
-        [2.21, 2.11, 2.02, 1.92, 1.76, 1.60, 1.54, 1.46, 1.38],
-        [1.93, 1.85, 1.76, 1.68, 1.54, 1.40, 1.35, 1.28, 1.21],
-        [1.66, 1.58, 1.51, 1.44, 1.32, 1.20, 1.16, 1.10, 1.04],
-        [1.38, 1.32, 1.26, 1.20, 1.10, 1.00, 0.95, 0.90, 0.85],
-        [1.31, 1.19, 1.13, 1.08, 0.99, 0.90, 0.86, 0.81, 0.77],
-        [1.24, 1.12, 1.07, 1.02, 0.94, 0.85, 0.81, 0.77, 0.72],
-        [1.17, 1.06, 1.01, 0.96, 0.88, 0.80, 0.76, 0.72, 0.68],
-        [1.10, 0.99, 0.95, 0.90, 0.83, 0.75, 0.71, 0.68, 0.64],
-    ]
+
 
 function adjustBV(bv: string|undefined, gunSkill:number, pilotSkill:number) {
     const unitBV = Math.round(parseInt(bv?.replace(',','') || "0") *
@@ -114,7 +104,7 @@ export default function UnitList() {
     const [armorPointsFilter, setArmorPointsFilter] = useState("")
     const [weaponFilter, setWeaponFilter] = useState("")
 
-    const [force, setForce] = useState<ForceType>({units:[]})
+    const [force, setForce] = useState<ForceType>(new ForceType())
 
 
     useEffect(() => {
@@ -315,7 +305,7 @@ export default function UnitList() {
                 units.push(fUnit)
             }
         })
-        setForce({ units })
+        setForce(new ForceType(units))
     }
 
     function renderAddToForce(unit: UnitType) {
@@ -611,6 +601,7 @@ export default function UnitList() {
                     <Offcanvas.Title>Force Builder</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
+                    Units:{force.units.length}
                     <Table id="forceTable" striped bordered hover size="sm" responsive="sm">
                         <thead>
                         <tr>
@@ -621,13 +612,14 @@ export default function UnitList() {
                         </tr>
                         </thead>
                         <tbody>
-                    Units:{force.units.length}
+
+
                     { force.units.map( (forceUnit) => {
                         return (
                             <tr>
                                 <td>{forceUnit.unit.mechName}</td>
                                 <td>{forceUnit.gunnerySkill}/{forceUnit.pilotSkill}</td>
-                                <td>{forceUnit.unit.bv}</td>
+                                <td>{calculateBV(forceUnit.unit.bv || '0', forceUnit.gunnerySkill, forceUnit.pilotSkill)}</td>
                                 <td><Button size="sm" onClick={()=>removeUnitFromForce(forceUnit)}><FaMinus/></Button></td>
                             </tr>
                         )
@@ -636,7 +628,7 @@ export default function UnitList() {
                             <td></td>
                             <td></td>
                             <td>Total</td>
-                            <td></td>
+                            <td>{force.calculateBV()}</td>
                         </tr>
                         </tbody>
                     </Table>
