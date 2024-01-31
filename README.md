@@ -33,12 +33,20 @@ TODO:
 [x] Force Builder - add / remove
 [x] Force Builder - total up BV
 [x] Force Builder - Move force builder to new component
-[ ] Force Builder - change mechwarrior skills 
+[ ] Force Builder - save to cookies and add to onLoad
+
+[ ] Force Builder - change mechwarrior skills
 [ ] Force builder - better way of opening than stupid button?
-[ ] Force Builder - save to cookies to return
 [ ] Force builder - save to server when logged in / select force modal
 
 [ ] Cut up the unit page into smaller components!
+
+
+SHARE WITH VAULT DISCORD?
+[ ] remove 'notes page'
+[ ] write a 'how to' page
+[ ] disable login till manual confirm?
+[ ] put functionality behind login for now?
 
 [ ] delay / async filtering?
 

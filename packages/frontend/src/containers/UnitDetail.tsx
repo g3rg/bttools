@@ -47,11 +47,12 @@ export default function UnitDetail( props : UnitProps) {
             {renderField('Armor Points', unit?.armorPoints)}
             <b>Weapons:</b>
                 <Table id="weaponTable" striped bordered hover size="sm" responsive="sm">
+                    <tbody>
                 {
-                    unit?.weapons?.map( (weapon) => {
+                    unit?.weapons?.map( (weapon, index) => {
                     return (
 
-                        <tr>
+                        <tr key={index}>
                             <th>{weapon.type}</th>
                             <th>{weapon.location}</th>
                             <th>{weapon.ammo}</th>
@@ -59,6 +60,7 @@ export default function UnitDetail( props : UnitProps) {
                         )
                     })
                 }
+                    </tbody>
                 </Table>
         </>
     )

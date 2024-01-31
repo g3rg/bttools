@@ -111,7 +111,12 @@ export default function UnitList() {
 
     useEffect(() => {
         async function onLoad() {
-            // data_url
+            // TODO Load 'force' from local storage
+            let localForce = localStorage.getItem('force')
+            if (localForce) {
+                let forceData = JSON.parse(localForce)
+                setForce(new ForceType(forceData.units))
+            }
 
             if (!isAuthenticated) {
                 setIsLoading(false)
@@ -125,7 +130,9 @@ export default function UnitList() {
 
     useEffect( () => {
         // @ts-ignore
-        setRowCount(document.getElementById("unitTable")?.tBodies[0].rows.length);
+        let rowCount = document.getElementById("unitTable")?.tBodies[0].rows.length;
+        if (rowCount && rowCount != '')
+            setRowCount(rowCount);
     }, [unitFilter, minTonFilter, maxTonFilter, minBVFilter, maxBVFilter, minPVFilter, maxPVFilter,
         roleFilter, ruleFilter, factionFilter, eraFilter, techBaseFilter, engineFilter, structureFilter, heatFilter,
         walkFilter, jumpFilter, armorTypeFilter, armorPointsFilter, weaponFilter])
@@ -297,7 +304,9 @@ export default function UnitList() {
             alphaSkill: 4,
         }
         force.units.push(fUnit)
+        localStorage.setItem("force", JSON.stringify(force))
         setForce(force)
+
     }
 
     function removeUnitFromForce(unit: ForceUnit) {
@@ -307,7 +316,9 @@ export default function UnitList() {
                 units.push(fUnit)
             }
         })
-        setForce(new ForceType(units))
+        let newForce = new ForceType(units)
+        localStorage.setItem("force", JSON.stringify(newForce))
+        setForce(newForce)
     }
 
     function renderAddToForce(unit: UnitType) {
@@ -472,20 +483,20 @@ export default function UnitList() {
                     <Form.Select value={factionFilter} onChange={(e) =>
                         setFactionFilter(e.target.value)
                     }>
-                        <option></option>
+                        <option key={0}></option>
                         {
-                            Object.keys(eraFactionData.factions).sort().map((faction) => (
-                                <option>{faction || ''}</option>
+                            Object.keys(eraFactionData.factions).sort().map((faction, index) => (
+                                <option key={index+1}>{faction || ''}</option>
                             ))}
                     </Form.Select>
                     Era:
                     <Form.Select value={eraFilter} onChange={(e) =>
                         setEraFilter(e.target.value)
                     }>
-                        <option></option>
+                        <option key={0}></option>
                         {
-                            Object.keys(eraFactionData.eras).sort().map((era) => (
-                                <option>{era || ''}</option>
+                            Object.keys(eraFactionData.eras).sort().map((era, index) => (
+                                <option key={index+1}>{era || ''}</option>
                             ))}
                     </Form.Select>
                     TechBase:
@@ -493,8 +504,8 @@ export default function UnitList() {
                         setTechBaseFilter(e.target.value)
                     }>
                         {
-                            techBases.map((techBase) => (
-                                <option>{techBase || ''}</option>
+                            techBases.map((techBase, index) => (
+                                <option key={index}>{techBase || ''}</option>
                             ))}
                     </Form.Select>
                     Role:
@@ -502,16 +513,16 @@ export default function UnitList() {
                             setRoleFilter(e.target.value)
                         }>
                             {
-                                roles.map((role) => (
-                                    <option>{role || ''}</option>
+                                roles.map((role, index) => (
+                                    <option key={index}>{role || ''}</option>
                                 ))}
                     </Form.Select>
                     Rules:
                     <Form.Select value={ruleFilter} onChange={(e) =>
                             setRuleFilter(e.target.value)
                         }>
-                            {rules.map((rule) => (
-                                <option>{rule || ''}</option>
+                            {rules.map((rule, index) => (
+                                <option key={index}>{rule || ''}</option>
                             ))}
                     </Form.Select>
 

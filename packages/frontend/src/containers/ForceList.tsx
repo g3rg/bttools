@@ -35,7 +35,7 @@ export default function ForceList( props : ForceListProps) {
 
                     { force.units.map( (forceUnit) => {
                         return (
-                            <tr>
+                            <tr key={forceUnit.id}>
                                 <td>{forceUnit.unit.mechName}</td>
                                 <td>{forceUnit.gunnerySkill}/{forceUnit.pilotSkill}</td>
                                 <td>{calculateBV(forceUnit.unit.bv || '0', forceUnit.gunnerySkill, forceUnit.pilotSkill)}</td>
