@@ -20,7 +20,6 @@ export class ForceType {
     calculateBV(): number {
         let total = 0
         this.units.forEach((fUnit) => {
-            console.log(fUnit.unit.bv)
             total += calculateBV(fUnit.unit.bv || '0', fUnit.gunnerySkill, fUnit.pilotSkill)
         })
 

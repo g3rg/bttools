@@ -9,13 +9,15 @@ import { Form } from 'react-bootstrap'
 import { v4 as uuidv4 } from 'uuid'
 
 import UnitDetail from './UnitDetail.tsx'
-import {BV_Pilot_Adjustments, calculateBV} from '../lib/battletech.ts'
+import ForceList from './ForceList.tsx'
+
+import { BV_Pilot_Adjustments } from '../lib/battletech.ts'
 
 import mechData from '../data/merged_mech_data.json'
 import eraFactionData from '../data/mul_mech_era_faction.json'
 
 import Button from "react-bootstrap/Button"
-import {FaMinus, FaPlus} from "react-icons/fa"
+import { FaPlus } from "react-icons/fa"
 
 const MUL_UnitDetail_URL = `https://masterunitlist.info/Unit/Details/{id}`
 const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s={mechName}`
@@ -594,53 +596,10 @@ export default function UnitList() {
         )
     }
 
-    function renderForcePanel() {
-        return (
-            <Offcanvas show={showForce} onHide={handleHideForce} placement="end">
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>Force Builder</Offcanvas.Title>
-                </Offcanvas.Header>
-                <Offcanvas.Body>
-                    Units:{force.units.length}
-                    <Table id="forceTable" striped bordered hover size="sm" responsive="sm">
-                        <thead>
-                        <tr>
-                            <th>Unit</th>
-                            <th>Skill</th>
-                            <th>BV (?/?)</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-
-
-                    { force.units.map( (forceUnit) => {
-                        return (
-                            <tr>
-                                <td>{forceUnit.unit.mechName}</td>
-                                <td>{forceUnit.gunnerySkill}/{forceUnit.pilotSkill}</td>
-                                <td>{calculateBV(forceUnit.unit.bv || '0', forceUnit.gunnerySkill, forceUnit.pilotSkill)}</td>
-                                <td><Button size="sm" onClick={()=>removeUnitFromForce(forceUnit)}><FaMinus/></Button></td>
-                            </tr>
-                        )
-                    })}
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td>Total</td>
-                            <td>{force.calculateBV()}</td>
-                        </tr>
-                        </tbody>
-                    </Table>
-                </Offcanvas.Body>
-            </Offcanvas>
-        )
-    }
-
     return (
         <div className="Home">
             {renderFilters()}
-            {renderForcePanel()}
+            <ForceList force={force} handleHideForce={handleHideForce} removeUnitFromForce={removeUnitFromForce} showForce={showForce}/>
             {renderUnits()}
         </div>
     )

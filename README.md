@@ -30,12 +30,14 @@ TODO:
 
 [x] Force Builder - add / remove
 [x] Force Builder - total up BV
+[ ] Force Builder - Move force builder to new component
 [ ] Force Builder - change mechwarrior skills 
 [ ] Force builder - better way of opening than stupid button?
 [ ] Force Builder - save to cookies to return
 [ ] Force builder - save to server when logged in / select force modal
-[ ] Force Builder - 
 
+
+[ ] Cut up the unit page into smaller components!
 [ ] delay / async filtering?
 [ ] More intelligent linking to Flechs, e.g. Clan mechs tend to not include bracket?
 
