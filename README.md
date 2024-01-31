@@ -34,34 +34,40 @@ TODO:
 [x] Force Builder - total up BV
 [x] Force Builder - Move force builder to new component
 [x] Force Builder - save to cookies and add to onLoad
+[x] Force Builder - change mechwarrior skills
 
-[ ] Force Builder - change mechwarrior skills
+
+[ ] Force builder - save to server when logged in / select force modal?
+    DynamoDB - 
+        GUID
+        Name
+        Description
+        MechNames
+        ForceType json
+
+[ ] Copy force to clipboard in MUL format? Print?
+
 [ ] Cut up the unit page into smaller components!
-[ ] Force builder - save to server when logged in / select force modal
-
 
 SHARE WITH VAULT DISCORD?
 [ ] remove 'notes page'
 [ ] write a 'how to' page
+[ ] landing page?
 [ ] disable login till manual confirm?
 [ ] put functionality behind login for now?
+[ ] issue / suggestions - if github, remove data files?
+
 
 [ ] delay / async filtering?
-
 [ ] More intelligent linking to Flechs, e.g. Clan mechs tend to not include bracket?
-
 [ ] Weapons Search 
       ISLBXAC10 vs LB 10-X AC
         Do we search better? Or store better and map there?
-
 [ ] Weapon stats searching
     * Alpha Strike max damage
     * Max damage at range
     * Avg dmg calculator?
     * Rear weapons?
     * flippy arms
-
-
 [ ] Make it look better
-
 [ ] Fix ts ignores properly

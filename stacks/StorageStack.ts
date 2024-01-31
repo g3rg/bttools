@@ -22,8 +22,17 @@ export function StorageStack({ stack }: StackContext) {
         primaryIndex: { partitionKey: "userId", sortKey: "noteId" },
     });
 
+    const forceTable = new Table(stack, "Forces", {
+        fields: {
+            userId: "string",
+            forceId: "string",
+        },
+        primaryIndex: { partitionKey: "userId", sortKey: "forceId"}
+    });
+
     return {
         bucket,
         table,
+        forceTable
     };
 }
