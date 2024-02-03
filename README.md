@@ -35,15 +35,19 @@ TODO:
 [x] Force Builder - Move force builder to new component
 [x] Force Builder - save to cookies and add to onLoad
 [x] Force Builder - change mechwarrior skills
-
+[ ] Force Builder - show current force BV in filter summary
+[ ] Force Builder - Open all in Flechs....
 
 [ ] Force builder - save to server when logged in / select force modal?
-    DynamoDB - 
-        GUID
-        Name
-        Description
-        MechNames
-        ForceType json
+    [x] DynamoDB
+    [x] Crud API
+    [ ] add name, description to force when logged in
+    [ ] Show save button if logged in
+    [ ] call create API
+    [ ] 
+
+
+
 
 [ ] Copy force to clipboard in MUL format? Print?
 

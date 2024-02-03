@@ -497,7 +497,7 @@ export default function UnitList() {
         return (<>
             <Button onClick={handleShowForce} size="sm">Force</Button>&nbsp;&nbsp;
             <Button onClick={handleShowAdvancedFilters} size="sm">Filters</Button>
-            &nbsp;&nbsp;Rows { rowCount }, Force Size { force.units.length }<br/>
+            &nbsp;&nbsp;Rows { rowCount }, Force: { force.units.length } units, { force.calculateBV() }<br/>
             <br/>
             &nbsp;Active Filters: {summariseFilters()}
 
