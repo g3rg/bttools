@@ -14,7 +14,9 @@ import ForceList from './ForceList.tsx'
 import { BV_Pilot_Adjustments } from '../lib/battletech.ts'
 
 import mechData from '../data/merged_mech_data.json'
-import eraFactionData from '../data/mul_mech_era_faction.json'
+
+import { getFactions, getEras, unitValidForFactionEra, unitValidForFaction, unitValidForEra } from '../data/unitData.ts'
+
 
 import Button from "react-bootstrap/Button"
 import { FaPlus } from "react-icons/fa"
@@ -197,22 +199,17 @@ export default function UnitList() {
         }
 
         if (show && factionFilter !== "" && eraFilter !== "") {
-
-            let factionEraKey = factionFilter + ":" + eraFilter
-            // @ts-ignore
-            if (!eraFactionData['factionEras'][factionEraKey]?.includes(unit.mechId)) {
+            if (!unitValidForFactionEra(unit, factionFilter, eraFilter)) {
                 show = false
             }
         } else {
             if (show && factionFilter !== "") {
-                // @ts-ignore
-                if (!eraFactionData['factions'][factionFilter]?.includes(unit.mechId)) {
+                if (!unitValidForFaction(unit, factionFilter)) {
                     show = false
                 }
             }
             if (show && eraFilter !== "") {
-                // @ts-ignore
-                if (!eraFactionData['eras'][eraFilter]?.includes(unit.mechId)) {
+                if (!unitValidForEra(unit, eraFilter)) {
                     show = false
                 }
             }
@@ -513,7 +510,7 @@ export default function UnitList() {
                     }>
                         <option key={0}></option>
                         {
-                            Object.keys(eraFactionData.factions).sort().map((faction, index) => (
+                            getFactions().map((faction, index) => (
                                 <option key={index+1}>{faction || ''}</option>
                             ))}
                     </Form.Select>
@@ -523,7 +520,7 @@ export default function UnitList() {
                     }>
                         <option key={0}></option>
                         {
-                            Object.keys(eraFactionData.eras).sort().map((era, index) => (
+                            getEras().map((era, index) => (
                                 <option key={index+1}>{era || ''}</option>
                             ))}
                     </Form.Select>
