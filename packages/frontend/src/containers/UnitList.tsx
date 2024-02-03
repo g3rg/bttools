@@ -13,10 +13,14 @@ import ForceList from './ForceList.tsx'
 
 import { BV_Pilot_Adjustments } from '../lib/battletech.ts'
 
-import mechData from '../data/merged_mech_data.json'
-
-import { getFactions, getEras, unitValidForFactionEra, unitValidForFaction, unitValidForEra } from '../data/unitData.ts'
-
+import {
+    getFactions,
+    getEras,
+    unitValidForFactionEra,
+    unitValidForFaction,
+    unitValidForEra,
+    getUnitNames, getUnitData
+} from '../data/unitData.ts'
 
 import Button from "react-bootstrap/Button"
 import { FaPlus } from "react-icons/fa"
@@ -28,7 +32,7 @@ const Sarna_URL = `https://www.sarna.net/wiki/{mechChassis}`
 const MAX_BV = 5000
 const MAX_PV = 100
 
-let mechNames = Object.keys(mechData).sort()
+let mechNames = getUnitNames()
 
 const roles = [
     '',
@@ -59,8 +63,6 @@ const techBases = [
     'Mixed',
 ]
 
-
-
 function adjustBV(bv: string|undefined, gunSkill:number, pilotSkill:number) {
     const unitBV = Math.round(parseInt(bv?.replace(',','') || "0") *
         BV_Pilot_Adjustments[gunSkill][pilotSkill])
@@ -73,7 +75,7 @@ export default function UnitList() {
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
     const [showForce, setShowForce] = useState(false)
 
-    const [rowCount, setRowCount] = useState(Object.keys(mechData).length)
+    const [rowCount, setRowCount] = useState(getUnitNames().length)
 
     const handleShowAdvancedFilters = () => setShowAdvancedFilters(true)
     const handleHideAdvancedFilters = () => setShowAdvancedFilters(false)
@@ -404,7 +406,7 @@ export default function UnitList() {
     function renderUnits() {
         return (
             <div className="units">
-                <ListGroup>{!isLoading && renderUnitList(mechData)}</ListGroup>
+                <ListGroup>{!isLoading && renderUnitList(getUnitData())}</ListGroup>
             </div>
         )
     }

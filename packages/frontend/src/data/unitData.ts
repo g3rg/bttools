@@ -1,5 +1,7 @@
-import eraFactionData from '../data/mul_mech_era_faction.json'
 import { UnitType } from '../types/unit.ts'
+
+import eraFactionData from '../data/mul_mech_era_faction.json'
+import mechData from '../data/merged_mech_data.json'
 
 export function getFactions() {
     return Object.keys(eraFactionData.factions).sort()
@@ -22,4 +24,12 @@ export function unitValidForFactionEra(unit: UnitType, faction: string, era: str
     let factionEraKey = faction + ":" + era
     // @ts-ignore
     return (eraFactionData['factionEras'][factionEraKey]?.includes(unit.mechId))
+}
+
+export function getUnitNames() {
+    return Object.keys(mechData).sort()
+}
+
+export function getUnitData() {
+    return mechData
 }

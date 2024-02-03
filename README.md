@@ -62,6 +62,8 @@ then can replace with server calls in the future...
     [ ] call create API
     [ ] 
 
+[ ] Share Force vis JSON
+
 [ ] Copy force to clipboard in MUL format? Print?
 
 [ ] Refactor unit page further into smaller components!
