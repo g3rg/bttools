@@ -4,6 +4,9 @@ import Button from "react-bootstrap/Button"
 import {FaMinus} from "react-icons/fa"
 import {ForceType, ForceUnit} from "../types/force.ts"
 
+
+const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s=`
+
 interface ForceListProps {
     showForce: boolean
     force: ForceType
@@ -17,6 +20,14 @@ function parseDropDownAsNumber(e:  React.ChangeEvent<HTMLSelectElement>) {
     return parseInt(e.target.value || '0')
 }
 
+function buildFlechsURL(force: ForceType) {
+    let mechNames = force.units.map( (fUnit: ForceUnit) => {
+        return (fUnit.unit.mechName || '') + ','
+    })
+
+    return Flechs_UnitDetail_URL + mechNames
+}
+
 export default function ForceList( props : ForceListProps) {
     let { showForce, force, handleHideForce, removeUnitFromForce,
         updateForceUnitGunnery, updateForceUnitPiloting } = props
@@ -27,7 +38,7 @@ export default function ForceList( props : ForceListProps) {
                 <Offcanvas.Title>Force Builder</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-                Units:{force.units.length}
+                <a href={buildFlechsURL(force)} target="_">Open in Flechs</a>
                 <Table id="forceTable" striped bordered hover size="sm" responsive="sm">
                     <thead>
                     <tr>

@@ -35,8 +35,17 @@ TODO:
 [x] Force Builder - Move force builder to new component
 [x] Force Builder - save to cookies and add to onLoad
 [x] Force Builder - change mechwarrior skills
-[ ] Force Builder - show current force BV in filter summary
-[ ] Force Builder - Open all in Flechs....
+[x] Force Builder - show current force BV in filter summary
+[x] Force Builder - Open all in Flechs....
+
+[ ] Order Eras chronologically
+[ ] Select multiple eras - additive or subtractive???? and/or?
+[ ] select multiple factions? - additive or subtractive???? and/or?
+[ ] List faction/era availability for mech
+[ ] List faction/era availability for force
+
+[ ] Refactor - move all functions that use data files to be wrapped by a class, 
+    then can replace with server calls in the future...
 
 [ ] Force builder - save to server when logged in / select force modal?
     [x] DynamoDB
@@ -46,12 +55,9 @@ TODO:
     [ ] call create API
     [ ] 
 
-
-
-
 [ ] Copy force to clipboard in MUL format? Print?
 
-[ ] Cut up the unit page into smaller components!
+[ ] Refactor unit page further into smaller components!
 
 SHARE WITH VAULT DISCORD?
 [ ] remove 'notes page'
