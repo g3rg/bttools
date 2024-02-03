@@ -94,7 +94,9 @@ export default function UnitList() {
     const [ruleFilter, setRuleFilter] = useState("")
 
     // advanced filters
-    const [factionFilter, setFactionFilter] = useState("")
+    //const [factionFilter, setFactionFilter] = useState("")
+    const [factionFilter, setFactionFilter] = useState<string[]>([])
+
     const [eraFilter, setEraFilter] = useState("")
     const [techBaseFilter, setTechBaseFilter] = useState("")
     const [engineFilter, setEngineFilter] = useState("")
@@ -196,17 +198,18 @@ export default function UnitList() {
             }
         }
 
-        if (show && factionFilter !== "" && eraFilter !== "") {
-
-            let factionEraKey = factionFilter + ":" + eraFilter
+        if (show && (factionFilter.length > 0) && eraFilter !== "") {
+            // TODO - and/or for arrays?
+            let factionEraKey = factionFilter[0] + ":" + eraFilter
             // @ts-ignore
             if (!eraFactionData['factionEras'][factionEraKey]?.includes(unit.mechId)) {
                 show = false
             }
         } else {
-            if (show && factionFilter !== "") {
+            if (show && (factionFilter.length > 0)) {
+                // TODO - and/or???
                 // @ts-ignore
-                if (!eraFactionData['factions'][factionFilter]?.includes(unit.mechId)) {
+                if (!eraFactionData['factions'][factionFilter[0]]?.includes(unit.mechId)) {
                     show = false
                 }
             }
@@ -479,7 +482,7 @@ export default function UnitList() {
         setMaxPVFilter(MAX_PV)
         setRoleFilter("")
         setRuleFilter("")
-        setFactionFilter("")
+        setFactionFilter([])
         setEraFilter("")
         setTechBaseFilter("")
         setEngineFilter("")
@@ -508,8 +511,8 @@ export default function UnitList() {
                 <Offcanvas.Body>
                     <Button onClick={clearFilters} size='sm'>Clear Filters</Button><br/>
                     Faction:
-                    <Form.Select value={factionFilter} onChange={(e) =>
-                        setFactionFilter(e.target.value)
+                    <Form.Select value={factionFilter} multiple onChange={(e) =>
+                        setFactionFilter([].slice.call(e.target.selectedOptions).map(item => item.value))
                     }>
                         <option key={0}></option>
                         {
