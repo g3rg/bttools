@@ -1,3 +1,5 @@
+import {ForceType} from "../types/force.ts";
+
 export const BV_Pilot_Adjustments =
     [
         [2.42, 2.31, 2.21, 2.10, 1.93, 1.75, 1.68, 1.59, 1.50],
@@ -15,4 +17,13 @@ export function calculateBV(unitBV: string, gunnerySkill: number, pilotSkill: nu
     let calcBV = parseInt(unitBV?.replace(',','') || '0')
         * BV_Pilot_Adjustments[gunnerySkill][pilotSkill]
     return Math.round(calcBV)
+}
+
+export function calculateForceBV(force: ForceType) {
+    let total = 0
+    force?.units?.forEach((fUnit) => {
+        total += calculateBV(fUnit.unit.bv || '0', fUnit.gunnerySkill, fUnit.pilotSkill)
+    })
+
+    return Math.round(total)
 }

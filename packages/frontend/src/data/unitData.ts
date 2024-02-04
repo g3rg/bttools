@@ -40,6 +40,6 @@ export function getUnitNames() {
     return Object.keys(mechData).sort()
 }
 
-export function getUnitData() {
+export function getUnitData() : {} {
     return mechData
 }

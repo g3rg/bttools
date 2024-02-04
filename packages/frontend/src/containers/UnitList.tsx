@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid'
 import UnitDetail from './UnitDetail.tsx'
 import ForceList from './ForceList.tsx'
 
-import { BV_Pilot_Adjustments } from '../lib/battletech.ts'
+import {BV_Pilot_Adjustments, calculateForceBV} from '../lib/battletech.ts'
 
 import {
     getFactions,
@@ -110,8 +110,12 @@ export default function UnitList() {
     const [armorPointsFilter, setArmorPointsFilter] = useState("")
     const [weaponFilter, setWeaponFilter] = useState("")
 
-    const [force, setForce] = useState<ForceType>(new ForceType())
+    const [force, setForce] = useState<ForceType>({ units:[] })
 
+    function setForceAndStore( force: ForceType) {
+        setForce(force)
+        localStorage.setItem("force", JSON.stringify(force))
+    }
 
     useEffect(() => {
         async function onLoad() {
@@ -119,7 +123,7 @@ export default function UnitList() {
             let localForce = localStorage.getItem('force')
             if (localForce) {
                 let forceData = JSON.parse(localForce)
-                setForce(new ForceType(forceData.units))
+                setForceAndStore({ units: forceData.units || [] })
             }
 
             if (!isAuthenticated) {
@@ -139,7 +143,7 @@ export default function UnitList() {
             setRowCount(rowCount);
     }, [unitFilter, minTonFilter, maxTonFilter, minBVFilter, maxBVFilter, minPVFilter, maxPVFilter,
         roleFilter, ruleFilter, factionFilter, eraFilter, techBaseFilter, engineFilter, structureFilter, heatFilter,
-        walkFilter, jumpFilter, armorTypeFilter, armorPointsFilter, weaponFilter])
+        walkFilter, jumpFilter, armorTypeFilter, armorPointsFilter, weaponFilter, force])
 
     function doFilter(unit: UnitType) {
         let show = true
@@ -295,6 +299,10 @@ export default function UnitList() {
     }
 
     function addUnitToForce(unit: UnitType) {
+        let newForce = { ... force}
+        if (!newForce.units) {
+            newForce.units = []
+        }
         let fUnit = {
             id: uuidv4(),
             unit: unit,
@@ -302,50 +310,45 @@ export default function UnitList() {
             pilotSkill: mechwarriorPilotSkill,
             alphaSkill: 4,
         }
-        force.units.push(fUnit)
-        localStorage.setItem("force", JSON.stringify(force))
-        setForce(force)
-
+        newForce.units.push(fUnit)
+        setForceAndStore(newForce)
     }
 
     function removeUnitFromForce(unit: ForceUnit) {
         let units: ForceUnit[] = []
-        force.units.forEach( (fUnit) => {
+        force.units?.forEach( (fUnit) => {
             if (unit.id != fUnit.id) {
                 units.push(fUnit)
             }
         })
-        let newForce = new ForceType(units)
-        localStorage.setItem("force", JSON.stringify(newForce))
-        setForce(newForce)
+        let newForce = { units }
+        setForceAndStore(newForce)
     }
 
     function updateForceUnitGunnery(id: string, newSkill: number) {
         let units: ForceUnit[] = []
-        force.units.forEach((fUnit) => {
+        force.units?.forEach((fUnit) => {
             if (id == fUnit.id) {
                 fUnit.gunnerySkill = newSkill
             }
             units.push(fUnit)
         })
 
-        let newForce = new ForceType(units)
-        localStorage.setItem("force", JSON.stringify(newForce))
-        setForce(newForce)
+        let newForce = { units }
+        setForceAndStore(newForce)
     }
 
     function updateForceUnitPilot(id: string, newSkill: number) {
         let units: ForceUnit[] = []
-        force.units.forEach((fUnit) => {
+        force.units?.forEach((fUnit) => {
             if (id == fUnit.id) {
                 fUnit.pilotSkill = newSkill
             }
             units.push(fUnit)
         })
 
-        let newForce = new ForceType(units)
-        localStorage.setItem("force", JSON.stringify(newForce))
-        setForce(newForce)
+        let newForce = { units }
+        setForceAndStore(newForce)
     }
 
     function renderAddToForce(unit: UnitType) {
@@ -496,7 +499,7 @@ export default function UnitList() {
         return (<>
             <Button onClick={handleShowForce} size="sm">Force</Button>&nbsp;&nbsp;
             <Button onClick={handleShowAdvancedFilters} size="sm">Filters</Button>
-            &nbsp;&nbsp;Rows { rowCount }, Force: { force.units.length } units, { force.calculateBV() }<br/>
+            &nbsp;&nbsp;Rows { rowCount }, Force: { force.units?.length } units, { calculateForceBV(force) }<br/>
             <br/>
             &nbsp;Active Filters: {summariseFilters()}
 

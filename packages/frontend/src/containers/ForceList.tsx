@@ -1,5 +1,5 @@
 import {Col, Form, Offcanvas, Row, Table} from "react-bootstrap"
-import {calculateBV} from "../lib/battletech.ts"
+import {calculateBV, calculateForceBV} from "../lib/battletech.ts"
 import Button from "react-bootstrap/Button"
 import {FaMinus} from "react-icons/fa"
 import {ForceType, ForceUnit} from "../types/force.ts"
@@ -20,7 +20,7 @@ function parseDropDownAsNumber(e:  React.ChangeEvent<HTMLSelectElement>) {
 }
 
 function buildFlechsURL(force: ForceType) {
-    let mechNames = force.units.map( (fUnit: ForceUnit) => {
+    let mechNames = force?.units?.map( (fUnit: ForceUnit) => {
         return (fUnit.unit.mechName || '') + ','
     })
 
@@ -33,11 +33,11 @@ export default function ForceList( props : ForceListProps) {
 
 
     function renderAvailability() {
-        let eras = force?.units[0]?.unit?.unitEras
-        let factions = force?.units[0]?.unit?.unitFactions
-        let factionEras = force?.units[0]?.unit?.unitFactionEras
+        let eras = force?.units?.[0]?.unit?.unitEras
+        let factions = force?.units?.[0]?.unit?.unitFactions
+        let factionEras = force?.units?.[0]?.unit?.unitFactionEras
 
-        force.units.forEach ( (forceUnit) => {
+        force?.units?.forEach ( (forceUnit) => {
             let loopEras: string[] = []
             let loopFactions: string[] = []
             let loopFactionEras: string[] = []
@@ -106,7 +106,7 @@ export default function ForceList( props : ForceListProps) {
                     <tbody>
 
 
-                    { force.units.map( (forceUnit) => {
+                    { force?.units?.map( (forceUnit) => {
                         return (
                             <tr key={forceUnit.id}>
                                 <td>{forceUnit.unit.mechName}</td>
@@ -139,7 +139,7 @@ export default function ForceList( props : ForceListProps) {
                         <td></td>
                         <td></td>
                         <td>Total</td>
-                        <td>{force.calculateBV()}</td>
+                        <td>{calculateForceBV(force)}</td>
                     </tr>
                     </tbody>
                 </Table>
