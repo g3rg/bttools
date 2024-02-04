@@ -47,7 +47,8 @@ then can replace with server calls in the future...
 [x] Order Eras chronologically
 [x] List faction/era availability for mech
 
-[ ] List faction/era availability for force
+[x] List faction/era availability for force
+[ ] Force count/total not updating on add...
 
 [ ] select multiple factions? - additive or subtractive???? and/or?
     BRANCH MultiSelectFilters

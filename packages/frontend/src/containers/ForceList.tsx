@@ -4,7 +4,6 @@ import Button from "react-bootstrap/Button"
 import {FaMinus} from "react-icons/fa"
 import {ForceType, ForceUnit} from "../types/force.ts"
 
-
 const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s=`
 
 interface ForceListProps {
@@ -31,6 +30,62 @@ function buildFlechsURL(force: ForceType) {
 export default function ForceList( props : ForceListProps) {
     let { showForce, force, handleHideForce, removeUnitFromForce,
         updateForceUnitGunnery, updateForceUnitPiloting } = props
+
+
+    function renderAvailability() {
+        let eras = force?.units[0]?.unit?.unitEras
+        let factions = force?.units[0]?.unit?.unitFactions
+        let factionEras = force?.units[0]?.unit?.unitFactionEras
+
+        force.units.forEach ( (forceUnit) => {
+            let loopEras: string[] = []
+            let loopFactions: string[] = []
+            let loopFactionEras: string[] = []
+
+            forceUnit.unit.unitEras?.forEach( (unitEra) => {
+                if (eras?.includes(unitEra)) {
+                    loopEras.push(unitEra)
+                }
+            })
+            forceUnit.unit.unitFactions?.forEach( (unitFaction) => {
+                if (factions?.includes(unitFaction)) {
+                    loopFactions.push(unitFaction)
+                }
+            })
+            forceUnit.unit.unitFactionEras?.forEach( (unitFactionEra) => {
+                if (factionEras?.includes(unitFactionEra)) {
+                    loopFactionEras.push(unitFactionEra)
+                }
+            })
+
+            eras = loopEras
+            factions = loopFactions
+            factionEras = loopFactionEras
+        } )
+
+        return (
+            <>
+                <b>Faction Availability:</b><br/>
+                { factions?.map( (faction) => {
+                    return (
+                        <>{faction}, </>
+                    )
+                })}<br/>
+                <b>Era Availability:</b><br/>
+                { eras?.map( (era) => {
+                    return (
+                        <>{era}, </>
+                    )
+                })}<br/>
+                <b>Faction Era Availability:</b><br/>
+                {factionEras?.map( (factionEra) => {
+                    return (
+                        <>{factionEra}, </>
+                    )
+                })}<br/>
+            </>
+        )
+    }
 
     return (
         <Offcanvas show={showForce} onHide={handleHideForce} placement="end">
@@ -88,6 +143,7 @@ export default function ForceList( props : ForceListProps) {
                     </tr>
                     </tbody>
                 </Table>
+                { renderAvailability() }
             </Offcanvas.Body>
         </Offcanvas>
     )
