@@ -45,15 +45,14 @@ then can replace with server calls in the future...
 
 [x] Show era years
 [x] Order Eras chronologically
+[x] List faction/era availability for mech
+
+[ ] List faction/era availability for force
 
 [ ] select multiple factions? - additive or subtractive???? and/or?
     BRANCH MultiSelectFilters
 
 [ ] Select multiple eras - additive or subtractive???? and/or?
-[ ] List faction/era availability for mech
-[ ] List faction/era availability for force
-
-
 
 [ ] Force builder - save to server when logged in / select force modal?
     [x] DynamoDB
@@ -62,6 +61,8 @@ then can replace with server calls in the future...
     [ ] Show save button if logged in
     [ ] call create API
     [ ] 
+
+[ ] refactor data access to be server component to reduce memory footprint?
 
 [ ] Share Force vis JSON
 
