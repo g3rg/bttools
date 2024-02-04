@@ -20,6 +20,31 @@ export default function UnitDetail( props : UnitProps) {
             )
     }
 
+    function renderAvailability() {
+        return (
+            <>
+                <b>Faction Availability:</b><br/>
+                { unit?.unitFactions?.map( (faction) => {
+                    return (
+                        <>{faction}, </>
+                    )
+                })}<br/>
+                <b>Era Availability:</b><br/>
+                { unit?.unitEras?.map( (era) => {
+                    return (
+                        <>{era}, </>
+                    )
+                })}<br/>
+                <b>Faction Era Availability:</b><br/>
+                {unit?.unitFactionEras?.map( (factionEra) => {
+                    return (
+                        <>{factionEra}, </>
+                    )
+                })}<br/>
+            </>
+        )
+    }
+
     const heatSinks = unit?.heatSinks?.count + ' ' + unit?.heatSinks?.type
 
     return (
@@ -62,6 +87,7 @@ export default function UnitDetail( props : UnitProps) {
                 }
                     </tbody>
                 </Table>
+            {renderAvailability()}
         </>
     )
 }

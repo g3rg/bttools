@@ -36,4 +36,9 @@ export interface UnitType {
     armorType?: string;
     armorPoints?: number;
     weapons?: WeaponType[];
+
+
+    unitFactions?: string[];
+    unitEras?: string[];
+    unitFactionEras?: string[];
 }
