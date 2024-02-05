@@ -3,6 +3,7 @@ import {calculateBV, calculateForceBV} from "../lib/battletech.ts"
 import Button from "react-bootstrap/Button"
 import {FaMinus} from "react-icons/fa"
 import {ForceType, ForceUnit} from "../types/force.ts"
+import {BsClipboard2Plus, BsClipboardCheck, BsCopy} from "react-icons/bs";
 
 const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s=`
 
@@ -93,7 +94,19 @@ export default function ForceList( props : ForceListProps) {
                 <Offcanvas.Title>Force Builder</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-                <a href={buildFlechsURL(force)} target="_">Open in Flechs</a>
+                <Button title="Copy Force to Clipboard" onClick={ () => {
+                    navigator.clipboard.writeText(JSON.stringify(force)).then(()=>alert('Force copied to clipboard'))
+                }}><BsCopy/></Button>&nbsp;
+                <Button title="Add Units from Clipboard" onClick={ () => {
+                    alert('Not Implemented Yet')
+                }}><BsClipboard2Plus/></Button>&nbsp;
+                <Button title="Import force from clipboard" onClick={ () => {
+                    alert('Not Implemented Yet')
+                }}><BsClipboardCheck/></Button>&nbsp;
+
+                <br/>
+                <a href={buildFlechsURL(force)} target="_">Open in Flechs</a>&nbsp;&nbsp;
+                <br/>
                 <Table id="forceTable" striped bordered hover size="sm" responsive="sm">
                     <thead>
                     <tr>
@@ -104,7 +117,6 @@ export default function ForceList( props : ForceListProps) {
                     </tr>
                     </thead>
                     <tbody>
-
 
                     { force?.units?.map( (forceUnit) => {
                         return (

@@ -50,10 +50,16 @@ then can replace with server calls in the future...
 [x] List faction/era availability for force
 [x] Force count/total not updating on add...
 
-[ ] select multiple factions? - additive or subtractive???? and/or?
-    BRANCH MultiSelectFilters
+[x] Select multiple eras - additive or subtractive???? and/or?
 
-[ ] Select multiple eras - additive or subtractive???? and/or?
+[.] select multiple factions? - additive or subtractive???? and/or?
+Implemented, but hidden, didn't know how to make combined multi faction / eras work together
+
+[x] Copy Force to clipboard as JSON
+[.] Load force from clipboard
+[.] Add to force from clipboard
+
+[ ] Print MUL summary?
 
 [ ] Force builder - save to server when logged in / select force modal?
     [x] DynamoDB
@@ -64,11 +70,6 @@ then can replace with server calls in the future...
     [ ] 
 
 [ ] refactor data access to be server component to reduce memory footprint?
-
-[ ] Share Force vis JSON
-
-[ ] Copy force to clipboard in MUL format? Print?
-
 [ ] Refactor unit page further into smaller components!
 
 SHARE WITH VAULT DISCORD?
