@@ -381,12 +381,51 @@ export default function UnitList() {
             }
 
         })
-
-
     }
 
     function loadForceFromClipboard() {
-        alert('Not Implemented Yet')
+        navigator.clipboard.readText().then( (clipText) => {
+            let errors = []
+            let units: ForceUnit[] = []
+            let newForce = { units }
+            try {
+                let clipForce = JSON.parse(clipText)
+                if (!clipForce['units']) {
+                    errors.push('Clipboard did not contain a valid force')
+                } else {
+
+                    clipForce?.units?.forEach( (forceUnit: ForceUnitExport) => {
+                        let unitName = forceUnit.chassis + ' ' + forceUnit.variant
+                        // @ts-ignore
+                        let unitDetails = getUnitData()[unitName]
+                        if (unitDetails && unitDetails?.mechId == forceUnit.mechId) {
+                            // @ts-ignore
+                            let unit: UnitType = getUnitData()[unitName]
+                            let fUnit = {
+                                id: uuidv4(),
+                                unit: unit,
+                                gunnerySkill: forceUnit.gunnerySkill,
+                                pilotSkill: forceUnit.pilotSkill,
+                                alphaSkill: 4,
+                            }
+                            newForce.units.push(fUnit)
+                        } else {
+                            errors.push(`Invalid unit found: ${unitName} - ${forceUnit?.mechId})`)
+                        }
+                    })
+                    if (errors.length == 0)
+                        setForceAndStore(newForce)
+                }
+            } catch (e) {
+                console.log("Error loading from clipboard")
+                console.log(e)
+                errors.push("There was an error loading from clipboard or Clipboard did not contain a valid force")
+            }
+            if (errors.length > 0) {
+                alert(errors)
+            }
+
+        })
     }
 
     function removeUnitFromForce(unit: ForceUnit) {

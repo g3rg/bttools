@@ -58,7 +58,7 @@ Implemented, but hidden, didn't know how to make combined multi faction / eras w
 [x] Copy Force to clipboard as JSON
 [x] Reduce exported JSON to not include full unit details etc
 [x] Add to force from clipboard
-[.] Load force from clipboard
+[x] Load force from clipboard
 
 [ ] replace alert with toasts?
 
