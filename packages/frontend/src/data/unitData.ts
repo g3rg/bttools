@@ -61,11 +61,17 @@ export function unitValidForFaction(unit: UnitType, factions: string[]) {
     return show
 }
 
-export function unitValidForFactionEra(unit: UnitType, faction: string[], era: string[]) {
-    // @ts-ignore
-    let factionEraKey = faction[0] + ":" + eraData[era[0]]?.eraTitle
-    // @ts-ignore
-    return (eraFactionData['factionEras'][factionEraKey]?.includes(unit.mechId))
+export function unitValidForFactionEra(unit: UnitType, faction: string[], eras: string[]) {
+    let show = false
+    eras.forEach( (era) => {
+        // @ts-ignore
+        let factionEraKey = faction[0] + ":" + eraData[era]?.eraTitle
+        // @ts-ignore
+        if (eraFactionData['factionEras'][factionEraKey]?.includes(unit.mechId)) {
+            show = true
+        }
+    })
+    return show
 }
 
 export function getUnitNames() {
