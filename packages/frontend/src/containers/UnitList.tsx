@@ -99,7 +99,10 @@ export default function UnitList() {
 
     // advanced filters
     const [factionFilter, setFactionFilter] = useState("")
-    const [eraFilter, setEraFilter] = useState("")
+    // const [eraFilter, setEraFilter] = useState("")
+    const [eraFilter, setEraFilter] = useState<string[]>([])
+
+
     const [techBaseFilter, setTechBaseFilter] = useState("")
     const [engineFilter, setEngineFilter] = useState("")
     const [structureFilter, setStructureFilter] = useState("")
@@ -204,7 +207,7 @@ export default function UnitList() {
             }
         }
 
-        if (show && factionFilter !== "" && eraFilter !== "") {
+        if (show && factionFilter !== "" && eraFilter.length > 0) {
             if (!unitValidForFactionEra(unit, factionFilter, eraFilter)) {
                 show = false
             }
@@ -214,9 +217,11 @@ export default function UnitList() {
                     show = false
                 }
             }
-            if (show && eraFilter !== "") {
+            if (show && eraFilter.length > 0) {
                 if (!unitValidForEra(unit, eraFilter)) {
                     show = false
+                } else {
+                    console.log(unit.variant)
                 }
             }
         }
@@ -482,7 +487,7 @@ export default function UnitList() {
         setRoleFilter("")
         setRuleFilter("")
         setFactionFilter("")
-        setEraFilter("")
+        setEraFilter([])
         setTechBaseFilter("")
         setEngineFilter("")
         setStructureFilter("")
@@ -520,8 +525,8 @@ export default function UnitList() {
                             ))}
                     </Form.Select>
                     Era:
-                    <Form.Select value={eraFilter} onChange={(e) =>
-                        setEraFilter(e.target.value)
+                    <Form.Select value={eraFilter} multiple onChange={(e) =>
+                        setEraFilter([].slice.call(e.target.selectedOptions).map(item => item.value))
                     }>
                         <option key={0}></option>
                         {
