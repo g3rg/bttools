@@ -98,8 +98,7 @@ export default function UnitList() {
     const [ruleFilter, setRuleFilter] = useState("")
 
     // advanced filters
-    const [factionFilter, setFactionFilter] = useState("")
-    // const [eraFilter, setEraFilter] = useState("")
+    const [factionFilter, setFactionFilter] = useState<string[]>([])
     const [eraFilter, setEraFilter] = useState<string[]>([])
 
 
@@ -207,21 +206,23 @@ export default function UnitList() {
             }
         }
 
-        if (show && factionFilter !== "" && eraFilter.length > 0) {
+        const filterHasValueToApply = (filter: string[]) => {
+            return (filter.join('').length != 0)
+        }
+
+        if (show && filterHasValueToApply(factionFilter) && filterHasValueToApply(eraFilter)) {
             if (!unitValidForFactionEra(unit, factionFilter, eraFilter)) {
                 show = false
             }
         } else {
-            if (show && factionFilter !== "") {
+            if (show && filterHasValueToApply(factionFilter)) {
                 if (!unitValidForFaction(unit, factionFilter)) {
                     show = false
                 }
             }
-            if (show && eraFilter.length > 0) {
+            if (show && filterHasValueToApply(eraFilter)) {
                 if (!unitValidForEra(unit, eraFilter)) {
                     show = false
-                } else {
-                    console.log(unit.variant)
                 }
             }
         }
@@ -486,7 +487,7 @@ export default function UnitList() {
         setMaxPVFilter(MAX_PV)
         setRoleFilter("")
         setRuleFilter("")
-        setFactionFilter("")
+        setFactionFilter([])
         setEraFilter([])
         setTechBaseFilter("")
         setEngineFilter("")
@@ -515,8 +516,16 @@ export default function UnitList() {
                 <Offcanvas.Body>
                     <Button onClick={clearFilters} size='sm'>Clear Filters</Button><br/>
                     Faction:
-                    <Form.Select value={factionFilter} onChange={(e) =>
-                        setFactionFilter(e.target.value)
+                    <Form.Select value={factionFilter} onChange={(e) => setFactionFilter( [ e.target.value ])}>
+                        <option key={0}></option>
+                        {
+                            getFactions().map((faction, index) => (
+                                <option key={index+1}>{faction || ''}</option>
+                        ))}
+                    </Form.Select>
+                    <Form.Select hidden value={factionFilter} multiple onChange={(e) =>
+                        //@ts-ignore
+                        setFactionFilter([].slice.call(e.target.selectedOptions).map(item => item.value))
                     }>
                         <option key={0}></option>
                         {
@@ -525,8 +534,10 @@ export default function UnitList() {
                             ))}
                     </Form.Select>
                     Era:
-                    <Form.Select value={eraFilter} multiple onChange={(e) =>
+                    <Form.Select value={eraFilter} multiple onChange={(e) => {
+                        //@ts-ignore
                         setEraFilter([].slice.call(e.target.selectedOptions).map(item => item.value))
+                        }
                     }>
                         <option key={0}></option>
                         {
