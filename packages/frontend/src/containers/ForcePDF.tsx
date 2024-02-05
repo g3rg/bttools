@@ -1,5 +1,6 @@
-import { PDFViewer, Document, Page, View, Text, Font, StyleSheet } from '@react-pdf/renderer'
-import {useSearchParams} from "react-router-dom";
+import {PDFViewer, Document, Page, View, Text, Font, StyleSheet, PDFDownloadLink} from '@react-pdf/renderer'
+import {BrowserView, MobileView} from 'react-device-detect'
+import {useSearchParams} from "react-router-dom"
 
 export default function ForcePDF() {
 
@@ -69,8 +70,9 @@ export default function ForcePDF() {
         tonTotal += parseInt( unit.tons || '0')
     })
 
-    return (
-        <PDFViewer style={{ width: '100%', height: 500}}>
+
+    function renderDocument() {
+        return (
         <Document style={{ width: '100%', height: 500}}>
             <Page style={styles.body}>
                 <Text style={styles.title}>Force List</Text>
@@ -85,16 +87,16 @@ export default function ForcePDF() {
                     {
                         //@ts-ignore
                         data.map((row, i) => (
-                        <View key={i} style={styles.row} wrap={false}>
-                            <Text style={styles.row1}>
-                                <Text style={styles.bold}>{row.name}</Text>
-                            </Text>
-                            <Text style={styles.row2}>{row.type}</Text>
-                            <Text style={styles.row3}>{row.skill}</Text>
-                            <Text style={styles.row4}>{row.BV}</Text>
-                            <Text style={styles.row5}>{row.tons}</Text>
-                        </View>
-                    ))}
+                            <View key={i} style={styles.row} wrap={false}>
+                                <Text style={styles.row1}>
+                                    <Text style={styles.bold}>{row.name}</Text>
+                                </Text>
+                                <Text style={styles.row2}>{row.type}</Text>
+                                <Text style={styles.row3}>{row.skill}</Text>
+                                <Text style={styles.row4}>{row.BV}</Text>
+                                <Text style={styles.row5}>{row.tons}</Text>
+                            </View>
+                        ))}
                     <View style={[styles.row, styles.bold, styles.footer]}>
                         <Text style={styles.row1}>{data.length} units</Text>
                         <Text style={styles.row2}></Text>
@@ -105,7 +107,24 @@ export default function ForcePDF() {
                 </View>
             </Page>
         </Document>
-        </PDFViewer>
+        )
+    }
+
+    return (
+        <>
+            <MobileView>
+                <PDFDownloadLink
+                    document={renderDocument()}
+                    fileName='battletech_force_list.pdf'>
+                    Download PDF
+                </PDFDownloadLink>
+            </MobileView>
+            <BrowserView>
+                <PDFViewer style={{ width: '100%', height: 500}}>
+                    {renderDocument()}
+                </PDFViewer>
+            </BrowserView>
+        </>
     )
 }
 
