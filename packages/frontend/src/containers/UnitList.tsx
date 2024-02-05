@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
-import { Offcanvas, Dropdown, Table, Row, Col } from 'react-bootstrap'
+import { Offcanvas, Dropdown, Table, Row, Col, Toast, ToastContainer } from 'react-bootstrap'
 import { useAppContext } from '../lib/contextLib'
 import { UnitType } from '../types/unit.ts'
 import {ForceType, ForceUnit, ForceUnitExport} from '../types/force.ts'
@@ -74,6 +74,9 @@ export default function UnitList() {
     const [isLoading, setIsLoading] = useState(true)
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
     const [showForce, setShowForce] = useState(false)
+    const [showToast, setShowToast] = useState(false)
+    const [toastTitle, setToastTitle] = useState('')
+    const [toastMessage, setToastMessage] = useState('')
 
     const [rowCount, setRowCount] = useState(getUnitNames().length)
 
@@ -320,6 +323,16 @@ export default function UnitList() {
         setForceAndStore(newForce)
     }
 
+    function setAndShowToast(title: string, message: string, autoDismiss: boolean = false) {
+        setToastTitle(title)
+        setToastMessage(message)
+        setShowToast(true)
+        if (autoDismiss) {
+            setTimeout( ()=> { setShowToast(false)}, 3000)
+        }
+    }
+
+
     function copyForceToClipboard() {
         // TODO Include force name etc when that is implemented
         let units : ForceUnitExport[] = []
@@ -335,7 +348,7 @@ export default function UnitList() {
                 pilotSkill: forceUnit.pilotSkill
             })
         })
-        navigator.clipboard.writeText(JSON.stringify(exportForce)).then(()=>alert('Force copied to clipboard'))
+        navigator.clipboard.writeText(JSON.stringify(exportForce)).then(()=>setAndShowToast('Force','Force copied to clipboard', true))
     }
 
     function addUnitsFromClipboard() {
@@ -377,7 +390,7 @@ export default function UnitList() {
                 errors.push("There was an error loading from clipboard or Clipboard did not contain a valid force")
             }
             if (errors.length > 0) {
-                alert(errors)
+                setAndShowToast('Error Adding from Clipboard', errors.join('<br/>'))
             }
 
         })
@@ -422,7 +435,7 @@ export default function UnitList() {
                 errors.push("There was an error loading from clipboard or Clipboard did not contain a valid force")
             }
             if (errors.length > 0) {
-                alert(errors)
+                setAndShowToast('Error Loading from Clipboard', errors.join('<br/>'))
             }
 
         })
@@ -761,14 +774,37 @@ export default function UnitList() {
         )
     }
 
+    function renderToasts() {
+        // showToast
+        return (
+            <ToastContainer
+                style={{ zIndex: 5}}
+                >
+                <Toast show={showToast} onClose={()=>setShowToast(false)}>
+                    <Toast.Header>
+                        <img
+                            src="holder.js/20x20?text=%20"
+                            className="rounded me-2"
+                            alt=""
+                        />
+                        <strong className="me-auto">{toastTitle}</strong>
+                    </Toast.Header>
+                    <Toast.Body>{toastMessage}</Toast.Body>
+                </Toast>
+            </ToastContainer>
+        )
+    }
+
     return (
         <div className="Home">
+            {renderToasts()}
             {renderFilters()}
             <ForceList force={force} handleHideForce={handleHideForce} removeUnitFromForce={removeUnitFromForce}
                        addUnitsFromClipboard={addUnitsFromClipboard} loadForceFromClipboard={loadForceFromClipboard}
                        copyForceToClipboard={copyForceToClipboard}
                        showForce={showForce} updateForceUnitGunnery={updateForceUnitGunnery} updateForceUnitPiloting={updateForceUnitPilot}/>
             {renderUnits()}
+
         </div>
     )
 }

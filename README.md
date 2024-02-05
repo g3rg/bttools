@@ -59,8 +59,7 @@ Implemented, but hidden, didn't know how to make combined multi faction / eras w
 [x] Reduce exported JSON to not include full unit details etc
 [x] Add to force from clipboard
 [x] Load force from clipboard
-
-[ ] replace alert with toasts?
+[x] replace alert with toasts
 
 [ ] Print MUL summary?
 
@@ -72,11 +71,8 @@ Implemented, but hidden, didn't know how to make combined multi faction / eras w
     [ ] call create API
 
 
-
-
 [ ] refactor data access to be server component to reduce memory footprint?
 [ ] Refactor unit page further into smaller components!
-
 
 
 SHARE WITH VAULT DISCORD?
