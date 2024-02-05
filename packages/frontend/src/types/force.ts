@@ -16,3 +16,17 @@ export class ForceType {
     createTime?: string
     updateTime?: string
 }
+
+export interface ForceUnitExport {
+    id: string,
+    mechId: string,
+    name: string,
+    chassis: string,
+    variant: string,
+    gunnerySkill: number,
+    pilotSkill: number
+}
+
+export interface ForceTypeExport {
+    units?: ForceUnitExport[]
+}

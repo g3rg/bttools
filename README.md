@@ -56,8 +56,11 @@ then can replace with server calls in the future...
 Implemented, but hidden, didn't know how to make combined multi faction / eras work together
 
 [x] Copy Force to clipboard as JSON
+[x] Reduce exported JSON to not include full unit details etc
+[x] Add to force from clipboard
 [.] Load force from clipboard
-[.] Add to force from clipboard
+
+[ ] replace alert with toasts?
 
 [ ] Print MUL summary?
 
@@ -67,10 +70,14 @@ Implemented, but hidden, didn't know how to make combined multi faction / eras w
     [ ] add name, description to force when logged in
     [ ] Show save button if logged in
     [ ] call create API
-    [ ] 
+
+
+
 
 [ ] refactor data access to be server component to reduce memory footprint?
 [ ] Refactor unit page further into smaller components!
+
+
 
 SHARE WITH VAULT DISCORD?
 [ ] remove 'notes page'

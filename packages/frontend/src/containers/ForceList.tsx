@@ -16,6 +16,7 @@ interface ForceListProps {
     updateForceUnitPiloting: (id: string, newSkill: number) => void
     addUnitsFromClipboard: () => void
     loadForceFromClipboard: () => void
+    copyForceToClipboard: () => void
 }
 
 function parseDropDownAsNumber(e:  React.ChangeEvent<HTMLSelectElement>) {
@@ -31,7 +32,7 @@ function buildFlechsURL(force: ForceType) {
 }
 
 export default function ForceList( props : ForceListProps) {
-    let { showForce, force, handleHideForce, removeUnitFromForce,
+    let { showForce, force, handleHideForce, removeUnitFromForce, copyForceToClipboard,
         updateForceUnitGunnery, updateForceUnitPiloting, addUnitsFromClipboard, loadForceFromClipboard } = props
 
 
@@ -99,7 +100,7 @@ export default function ForceList( props : ForceListProps) {
             </Offcanvas.Header>
             <Offcanvas.Body>
                 <Button title="Copy Force to Clipboard" onClick={ () => {
-                    navigator.clipboard.writeText(JSON.stringify(force)).then(()=>alert('Force copied to clipboard'))
+                    copyForceToClipboard()
                 }}><BsCopy/></Button>&nbsp;
                 <Button title="Add Units from Clipboard" onClick={ () => {
                     addUnitsFromClipboard()

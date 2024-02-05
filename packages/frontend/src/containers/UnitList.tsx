@@ -3,7 +3,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import { Offcanvas, Dropdown, Table, Row, Col } from 'react-bootstrap'
 import { useAppContext } from '../lib/contextLib'
 import { UnitType } from '../types/unit.ts'
-import { ForceType, ForceUnit } from '../types/force.ts'
+import {ForceType, ForceUnit, ForceUnitExport} from '../types/force.ts'
 import './UnitList.css'
 import { Form } from 'react-bootstrap'
 import { v4 as uuidv4 } from 'uuid'
@@ -320,41 +320,66 @@ export default function UnitList() {
         setForceAndStore(newForce)
     }
 
+    function copyForceToClipboard() {
+        // TODO Include force name etc when that is implemented
+        let units : ForceUnitExport[] = []
+        let exportForce = { units }
+        force.units?.forEach( (forceUnit) => {
+            exportForce.units.push( {
+                id: forceUnit.id,
+                mechId: forceUnit.unit.mechId || '',
+                name: forceUnit.unit.mechName,
+                chassis: forceUnit.unit.chassis || '',
+                variant: forceUnit.unit.variant || '',
+                gunnerySkill: forceUnit.gunnerySkill,
+                pilotSkill: forceUnit.pilotSkill
+            })
+        })
+        navigator.clipboard.writeText(JSON.stringify(exportForce)).then(()=>alert('Force copied to clipboard'))
+    }
+
     function addUnitsFromClipboard() {
+
         navigator.clipboard.readText().then( (clipText) => {
-            // make sure its valid
+            let errors = []
+            let newForce = { units: [], ... force}
             try {
                 let clipForce = JSON.parse(clipText)
                 if (!clipForce['units']) {
-                    alert('Clipboard did not contain a valid force')
+                    errors.push('Clipboard did not contain a valid force')
                 } else {
 
-                    clipForce?.units?.forEach( (forceUnit: ForceUnit) => {
-                        console.log(forceUnit)
-                        let unitName = forceUnit.unit.chassis + ' ' + forceUnit.unit.variant
-                        console.log(unitName)
+                    clipForce?.units?.forEach( (forceUnit: ForceUnitExport) => {
+                        let unitName = forceUnit.chassis + ' ' + forceUnit.variant
                         // @ts-ignore
                         let unitDetails = getUnitData()[unitName]
-                        if (unitDetails && unitDetails?.mechId == forceUnit.unit?.mechId) {
-
+                        if (unitDetails && unitDetails?.mechId == forceUnit.mechId) {
+                            // @ts-ignore
+                            let unit: UnitType = getUnitData()[unitName]
+                            let fUnit = {
+                                id: uuidv4(),
+                                unit: unit,
+                                gunnerySkill: forceUnit.gunnerySkill,
+                                pilotSkill: forceUnit.pilotSkill,
+                                alphaSkill: 4,
+                            }
+                            newForce.units.push(fUnit)
                         } else {
-                            console.log(`Invalid unit found: ${unitName} - ${forceUnit.unit.mechId})`)
+                            errors.push(`Invalid unit found: ${unitName} - ${forceUnit?.mechId})`)
                         }
-                        console.log(unitDetails)
-
-                        /*
-                        alphaSkill, gunnerySkill, pilotSkill
-                        unit
-                            mechId
-                         */
                     })
-                    alert('Force found, but function not implemented yet')
+                    if (errors.length == 0)
+                        setForceAndStore(newForce)
                 }
             } catch (e) {
                 console.log("Error loading from clipboard")
                 console.log(e)
-                alert('Clipboard did not contain a valid force')
+                errors.push("There was an error loading from clipboard or Clipboard did not contain a valid force")
             }
+            if (errors.length > 0) {
+                alert(errors)
+            }
+
         })
 
 
@@ -702,6 +727,7 @@ export default function UnitList() {
             {renderFilters()}
             <ForceList force={force} handleHideForce={handleHideForce} removeUnitFromForce={removeUnitFromForce}
                        addUnitsFromClipboard={addUnitsFromClipboard} loadForceFromClipboard={loadForceFromClipboard}
+                       copyForceToClipboard={copyForceToClipboard}
                        showForce={showForce} updateForceUnitGunnery={updateForceUnitGunnery} updateForceUnitPiloting={updateForceUnitPilot}/>
             {renderUnits()}
         </div>
