@@ -14,6 +14,8 @@ interface ForceListProps {
     removeUnitFromForce: (fUnit: ForceUnit) => void
     updateForceUnitGunnery: (id: string, newSkill: number) => void
     updateForceUnitPiloting: (id: string, newSkill: number) => void
+    addUnitsFromClipboard: () => void
+    loadForceFromClipboard: () => void
 }
 
 function parseDropDownAsNumber(e:  React.ChangeEvent<HTMLSelectElement>) {
@@ -30,7 +32,7 @@ function buildFlechsURL(force: ForceType) {
 
 export default function ForceList( props : ForceListProps) {
     let { showForce, force, handleHideForce, removeUnitFromForce,
-        updateForceUnitGunnery, updateForceUnitPiloting } = props
+        updateForceUnitGunnery, updateForceUnitPiloting, addUnitsFromClipboard, loadForceFromClipboard } = props
 
 
     function renderAvailability() {
@@ -88,6 +90,8 @@ export default function ForceList( props : ForceListProps) {
         )
     }
 
+
+
     return (
         <Offcanvas show={showForce} onHide={handleHideForce} placement="end">
             <Offcanvas.Header closeButton>
@@ -98,10 +102,10 @@ export default function ForceList( props : ForceListProps) {
                     navigator.clipboard.writeText(JSON.stringify(force)).then(()=>alert('Force copied to clipboard'))
                 }}><BsCopy/></Button>&nbsp;
                 <Button title="Add Units from Clipboard" onClick={ () => {
-                    alert('Not Implemented Yet')
+                    addUnitsFromClipboard()
                 }}><BsClipboard2Plus/></Button>&nbsp;
                 <Button title="Import force from clipboard" onClick={ () => {
-                    alert('Not Implemented Yet')
+                    loadForceFromClipboard()
                 }}><BsClipboardCheck/></Button>&nbsp;
 
                 <br/>

@@ -320,6 +320,50 @@ export default function UnitList() {
         setForceAndStore(newForce)
     }
 
+    function addUnitsFromClipboard() {
+        navigator.clipboard.readText().then( (clipText) => {
+            // make sure its valid
+            try {
+                let clipForce = JSON.parse(clipText)
+                if (!clipForce['units']) {
+                    alert('Clipboard did not contain a valid force')
+                } else {
+
+                    clipForce?.units?.forEach( (forceUnit: ForceUnit) => {
+                        console.log(forceUnit)
+                        let unitName = forceUnit.unit.chassis + ' ' + forceUnit.unit.variant
+                        console.log(unitName)
+                        // @ts-ignore
+                        let unitDetails = getUnitData()[unitName]
+                        if (unitDetails && unitDetails?.mechId == forceUnit.unit?.mechId) {
+
+                        } else {
+                            console.log(`Invalid unit found: ${unitName} - ${forceUnit.unit.mechId})`)
+                        }
+                        console.log(unitDetails)
+
+                        /*
+                        alphaSkill, gunnerySkill, pilotSkill
+                        unit
+                            mechId
+                         */
+                    })
+                    alert('Force found, but function not implemented yet')
+                }
+            } catch (e) {
+                console.log("Error loading from clipboard")
+                console.log(e)
+                alert('Clipboard did not contain a valid force')
+            }
+        })
+
+
+    }
+
+    function loadForceFromClipboard() {
+        alert('Not Implemented Yet')
+    }
+
     function removeUnitFromForce(unit: ForceUnit) {
         let units: ForceUnit[] = []
         force.units?.forEach( (fUnit) => {
@@ -657,6 +701,7 @@ export default function UnitList() {
         <div className="Home">
             {renderFilters()}
             <ForceList force={force} handleHideForce={handleHideForce} removeUnitFromForce={removeUnitFromForce}
+                       addUnitsFromClipboard={addUnitsFromClipboard} loadForceFromClipboard={loadForceFromClipboard}
                        showForce={showForce} updateForceUnitGunnery={updateForceUnitGunnery} updateForceUnitPiloting={updateForceUnitPilot}/>
             {renderUnits()}
         </div>
