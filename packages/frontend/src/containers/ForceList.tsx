@@ -3,7 +3,7 @@ import {calculateBV, calculateForceBV} from "../lib/battletech.ts"
 import Button from "react-bootstrap/Button"
 import {FaMinus} from "react-icons/fa"
 import {ForceType, ForceUnit} from "../types/force.ts"
-import {BsClipboard2Plus, BsClipboardCheck, BsCopy} from "react-icons/bs";
+import {BsClipboard2Plus, BsClipboardCheck, BsCopy, BsPrinter} from "react-icons/bs";
 
 const Flechs_UnitDetail_URL = `https://sheets.flechs.net/?s=`
 
@@ -91,7 +91,19 @@ export default function ForceList( props : ForceListProps) {
         )
     }
 
+    function createForcePDFLink() {
+        let summary = force.units?.map ( (forceUnit) => {
+            return         {
+                name: forceUnit.unit.mechName,
+                type: 'BattleMech',
+                BV: calculateBV(forceUnit.unit.bv || '', forceUnit.gunnerySkill, forceUnit.pilotSkill),
+                skill: `${forceUnit.pilotSkill}/${forceUnit.gunnerySkill}`,
+                tons: forceUnit.unit.tons
+            }
+        })
 
+        return '/forcePdf?f=' + JSON.stringify((summary))
+    }
 
     return (
         <Offcanvas show={showForce} onHide={handleHideForce} placement="end">
@@ -108,7 +120,9 @@ export default function ForceList( props : ForceListProps) {
                 <Button title="Import force from clipboard" onClick={ () => {
                     loadForceFromClipboard()
                 }}><BsClipboardCheck/></Button>&nbsp;
-
+                <a target='_blank' href={createForcePDFLink()}>
+                <Button title="Create PDF" onClick={ () => {
+                }}><BsPrinter/></Button></a>&nbsp;
                 <br/>
                 <a href={buildFlechsURL(force)} target="_">Open in Flechs</a>&nbsp;&nbsp;
                 <br/>

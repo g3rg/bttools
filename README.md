@@ -61,7 +61,10 @@ Implemented, but hidden, didn't know how to make combined multi faction / eras w
 [x] Load force from clipboard
 [x] replace alert with toasts
 
-[ ] Print MUL summary?
+[ ] Print MUL summary
+    [x] iterate through mechs
+    [ ] summary
+    [ ] mobile browser support
 
 [ ] Force builder - save to server when logged in / select force modal?
     [x] DynamoDB

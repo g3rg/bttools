@@ -10,6 +10,7 @@ import MechStats from './containers/MechStats.tsx'
 
 import UnauthenticatedRoute from './containers/UnuthenticatedRoute.tsx'
 import AuthenticatedRoute from './containers/AuthenticatedRoute.tsx'
+import ForcePDF from "./containers/ForcePDF.tsx";
 
 export default function Links() {
     return (
@@ -35,6 +36,12 @@ export default function Links() {
                 path="/units"
                 element={
                         <UnitList />
+                }
+            />
+            <Route
+                path="/forcePDF"
+                element={
+                    <ForcePDF/>
                 }
             />
             <Route
