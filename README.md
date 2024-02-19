@@ -1,9 +1,6 @@
 * Checkout the code
 * setup SST and AWS stuff - https://sst.dev/guide.html
 * pnpm install in root directory
-* pnpm install in packages/core
-* pnpm install in packages/functions
-* pnpm install in packages/frontend
 
 * Run Dev backend - from root
   * pnpm sst dev
@@ -14,6 +11,46 @@
   * pnpm sst deploy --stage prod
 
 TODO:
+[ ] Force builder - save to server when logged in / select force modal?
+    [x] DynamoDB
+    [x] Crud API
+    [ ] add name, description to force when logged in
+    [ ] Show save button if logged in
+    [ ] call create API
+    [ ] List saved forces and load...
+
+
+[ ] refactor data access to be server component to reduce memory footprint?
+[ ] paging and filtering
+[ ] Refactor unit page further into smaller components!
+
+
+SHARE WITH VAULT DISCORD?
+[ ] remove 'notes page'
+[ ] write a 'how to' page
+[ ] landing page?
+[ ] disable login till manual confirm?
+[ ] put functionality behind login for now?
+[ ] issue / suggestions - if github, remove data files?
+
+[ ] delay / async filtering?
+[ ] More intelligent linking to Flechs, e.g. Clan mechs tend to not include bracket?
+[ ] Weapons Search
+    ISLBXAC10 vs LB 10-X AC
+    Do we search better? Or store better and map there?
+[ ] Weapon stats searching
+* Alpha Strike max damage
+  * Max damage at range
+  * Avg dmg calculator?
+  * Rear weapons?
+  * flippy arms
+  * 
+[ ] Make it look better
+[ ] Fix ts ignores properly
+
+
+
+DONE:
 [x] display filter options in effect when popout thingo is closed.
 [x] display rowcount
 [x] Alphabetical ordering of mechs/variants
@@ -52,7 +89,7 @@ then can replace with server calls in the future...
 
 [x] Select multiple eras - additive or subtractive???? and/or?
 
-[.] select multiple factions? - additive or subtractive???? and/or?
+[x] select multiple factions? - additive or subtractive???? and/or?
 Implemented, but hidden, didn't know how to make combined multi faction / eras work together
 
 [x] Copy Force to clipboard as JSON
@@ -61,42 +98,7 @@ Implemented, but hidden, didn't know how to make combined multi faction / eras w
 [x] Load force from clipboard
 [x] replace alert with toasts
 
-[ ] Print MUL summary
+[x] Print MUL summary
     [x] iterate through mechs
     [x] summary
-    [.] mobile browser support
-
-[ ] Force builder - save to server when logged in / select force modal?
-    [x] DynamoDB
-    [x] Crud API
-    [ ] add name, description to force when logged in
-    [ ] Show save button if logged in
-    [ ] call create API
-
-
-[ ] refactor data access to be server component to reduce memory footprint?
-[ ] Refactor unit page further into smaller components!
-
-
-SHARE WITH VAULT DISCORD?
-[ ] remove 'notes page'
-[ ] write a 'how to' page
-[ ] landing page?
-[ ] disable login till manual confirm?
-[ ] put functionality behind login for now?
-[ ] issue / suggestions - if github, remove data files?
-
-
-[ ] delay / async filtering?
-[ ] More intelligent linking to Flechs, e.g. Clan mechs tend to not include bracket?
-[ ] Weapons Search 
-      ISLBXAC10 vs LB 10-X AC
-        Do we search better? Or store better and map there?
-[ ] Weapon stats searching
-    * Alpha Strike max damage
-    * Max damage at range
-    * Avg dmg calculator?
-    * Rear weapons?
-    * flippy arms
-[ ] Make it look better
-[ ] Fix ts ignores properly
+    [x] mobile browser support
