@@ -81,3 +81,8 @@ export function getUnitNames() {
 export function getUnitData() : {} {
     return mechData
 }
+
+export function getUnit(unitName: string): UnitType {
+    //@ts-ignore
+    return mechData[unitName]
+}

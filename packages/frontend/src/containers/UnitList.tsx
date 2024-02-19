@@ -19,7 +19,8 @@ import {
     unitValidForFactionEra,
     unitValidForFaction,
     unitValidForEra,
-    getUnitNames, getUnitData
+    getUnitNames, getUnitData,
+    getUnit
 } from '../data/unitData.ts'
 
 import Button from "react-bootstrap/Button"
@@ -365,10 +366,10 @@ export default function UnitList() {
                     clipForce?.units?.forEach( (forceUnit: ForceUnitExport) => {
                         let unitName = forceUnit.chassis + ' ' + forceUnit.variant
                         // @ts-ignore
-                        let unitDetails = getUnitData()[unitName]
+                        let unitDetails = getUnit(unitName)
                         if (unitDetails && unitDetails?.mechId == forceUnit.mechId) {
                             // @ts-ignore
-                            let unit: UnitType = getUnitData()[unitName]
+                            let unit: UnitType = getUnit(unitName)
                             let fUnit = {
                                 id: uuidv4(),
                                 unit: unit,
@@ -410,10 +411,10 @@ export default function UnitList() {
                     clipForce?.units?.forEach( (forceUnit: ForceUnitExport) => {
                         let unitName = forceUnit.chassis + ' ' + forceUnit.variant
                         // @ts-ignore
-                        let unitDetails = getUnitData()[unitName]
+                        let unitDetails = getUnit(unitName)
                         if (unitDetails && unitDetails?.mechId == forceUnit.mechId) {
                             // @ts-ignore
-                            let unit: UnitType = getUnitData()[unitName]
+                            let unit: UnitType = getUnit(unitName)
                             let fUnit = {
                                 id: uuidv4(),
                                 unit: unit,
